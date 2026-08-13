@@ -5,12 +5,14 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 // import { connectDB } from "./config/db.js";
 import connectDB from "./config/db.js";
+import cloudinary from "./config/cloudinary.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { env } from "./config/env.js";
 import dns from "node:dns";
 
 // route imports
 import authRouter from "./routes/auth.routes.js";
+import casestudyRouter from "./routes/casestudy.routes.js";
 
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
@@ -27,6 +29,7 @@ app.use(cookieParser());
 // routes
 app.get("/", (req, res) => res.json({ message: "API running" }));
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/casestudies", casestudyRouter);
 
 // error handler
 app.use(errorHandler);
@@ -34,6 +37,7 @@ app.use(errorHandler);
 const PORT = env.PORT;
 const start = async () => {
   await connectDB();
+  await cloudinary.config();
   app.listen(PORT, () => {
     console.log(`Server running in ${env.NODE_ENV} mode on port ${PORT}`);
   });
