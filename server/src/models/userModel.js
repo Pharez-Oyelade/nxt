@@ -14,8 +14,10 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
+    default: null,
   },
+  inviteToken: { type: String, default: null },
+  inviteTokenExpires: { type: Date, default: null },
   role: {
     type: String,
     enum: ["client", "admin"],
