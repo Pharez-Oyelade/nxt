@@ -14,7 +14,7 @@ import {
   LogOut,
   Settings,
   User as UserIcon,
-  ChevronsUpDown
+  ChevronsUpDown,
 } from "lucide-react";
 
 import {
@@ -97,7 +97,7 @@ const navItems = [
       },
       {
         title: "Case Studies",
-        url: "/admin/casestudies",
+        url: "/admin/case-studies",
         icon: Presentation,
       },
     ],
@@ -135,7 +135,7 @@ export function AppSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      
+
       <SidebarContent>
         {navItems.map((group) => (
           <SidebarGroup key={group.title}>
@@ -143,10 +143,15 @@ export function AppSidebar() {
             <SidebarGroupContent>
               <SidebarMenu>
                 {group.items.map((item) => {
-                  const isActive = pathname === item.url || (pathname.startsWith(item.url) && item.url !== "/admin");
+                  const isActive =
+                    pathname === item.url ||
+                    (pathname.startsWith(item.url) && item.url !== "/admin");
                   return (
                     <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton isActive={isActive} render={<Link href={item.url} />}>
+                      <SidebarMenuButton
+                        isActive={isActive}
+                        render={<Link href={item.url} />}
+                      >
                         <item.icon />
                         <span>{item.title}</span>
                       </SidebarMenuButton>
@@ -173,11 +178,17 @@ export function AppSidebar() {
               >
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage src="" alt={user?.name || "User"} />
-                  <AvatarFallback className="rounded-lg">{getInitials(user?.name)}</AvatarFallback>
+                  <AvatarFallback className="rounded-lg">
+                    {getInitials(user?.name)}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">{user?.name || "Admin User"}</span>
-                  <span className="truncate text-xs">{user?.email || "admin@example.com"}</span>
+                  <span className="truncate font-semibold">
+                    {user?.name || "Admin User"}
+                  </span>
+                  <span className="truncate text-xs">
+                    {user?.email || "admin@example.com"}
+                  </span>
                 </div>
                 <ChevronsUpDown className="ml-auto size-4" />
               </DropdownMenuTrigger>
@@ -192,11 +203,17 @@ export function AppSidebar() {
                     <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                       <Avatar className="h-8 w-8 rounded-lg">
                         <AvatarImage src="" alt={user?.name || "User"} />
-                        <AvatarFallback className="rounded-lg">{getInitials(user?.name)}</AvatarFallback>
+                        <AvatarFallback className="rounded-lg">
+                          {getInitials(user?.name)}
+                        </AvatarFallback>
                       </Avatar>
                       <div className="grid flex-1 text-left text-sm leading-tight">
-                        <span className="truncate font-semibold">{user?.name || "Admin User"}</span>
-                        <span className="truncate text-xs">{user?.email || "admin@example.com"}</span>
+                        <span className="truncate font-semibold">
+                          {user?.name || "Admin User"}
+                        </span>
+                        <span className="truncate text-xs">
+                          {user?.email || "admin@example.com"}
+                        </span>
                       </div>
                     </div>
                   </DropdownMenuLabel>
