@@ -12,7 +12,7 @@ export const login = asyncHandler(async (req, res, next) => {
 
   // check if user exists
   const user = await User.findOne({ email });
-  if (!user || !(await bcrypt.compare(password, user.password))) {
+  if (!user) {
     throw new AppError("Invalid email or password", StatusCodes.UNAUTHORIZED);
   }
 
@@ -24,10 +24,10 @@ export const login = asyncHandler(async (req, res, next) => {
   }
 
   // check if password is correct
-  // const isPasswordCorrect = await bcrypt.compare(password, user.password);
-  // if (!isPasswordCorrect) {
-  //   throw new AppError("Invalid email or password", StatusCodes.UNAUTHORIZED);
-  // }
+  const isPasswordCorrect = await bcrypt.compare(password, user.password);
+  if (!isPasswordCorrect) {
+    throw new AppError("Invalid email or password", StatusCodes.UNAUTHORIZED);
+  }
 
   // generate token
   const token = jwt.sign(
