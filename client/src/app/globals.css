@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f3efe7;
+  --background: #ffffff;
   --foreground: #0b0b0c;
   --primary: #0b0b0c;
   --primary-foreground: #ffffff;
@@ -9,7 +9,7 @@
   --secondary-foreground: #0b0b0c;
   --accent: #ff4e2d;
   --accent-foreground: #ffffff;
-  --muted: #6e6a63;
+  --muted: #f3efe7;
   --muted-foreground: #6e6a63;
   --border: #ddd6c9;
   --card: #ffffff;
@@ -20,14 +20,14 @@
   --destructive-foreground: #ffffff;
   --ring: #0b0b0c;
   --radius: 0.5rem;
-  --sidebar-background: #ffffff;
-  --sidebar-foreground: #000000;
+  --sidebar-background: #f3efe7;
+  --sidebar-foreground: #0b0b0c;
   --sidebar-primary: #ff4e2d;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #f4f4f5;
-  --sidebar-accent-foreground: #000000;
-  --sidebar-border: #e5e5e5;
-  --sidebar-ring: #000000;
+  --sidebar-accent: #e3dfd7;
+  --sidebar-accent-foreground: #0b0b0c;
+  --sidebar-border: #ddd6c9;
+  --sidebar-ring: #0b0b0c;
 }
 
 @theme inline {
@@ -65,31 +65,31 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #121110;
+    --background: #0b0b0c;
     --foreground: #f3efe7;
     --primary: #f3efe7;
-    --primary-foreground: #121110;
+    --primary-foreground: #0b0b0c;
     --secondary: #2a2724;
     --secondary-foreground: #f3efe7;
     --accent: #ff6b4a;
     --accent-foreground: #ffffff;
-    --muted: #9c968a;
+    --muted: #18181b;
     --muted-foreground: #9c968a;
     --border: #2a2724;
-    --card: #18181b;
+    --card: #0b0b0c;
     --card-foreground: #f3efe7;
-    --popover: #18181b;
+    --popover: #0b0b0c;
     --popover-foreground: #f3efe7;
     --destructive: #ef4444;
     --destructive-foreground: #ffffff;
     --ring: #d4d4d8;
     --sidebar-background: #18181b;
-    --sidebar-foreground: #f4f4f5;
+    --sidebar-foreground: #f3efe7;
     --sidebar-primary: #ff6b4a;
     --sidebar-primary-foreground: #ffffff;
-    --sidebar-accent: #27272a;
-    --sidebar-accent-foreground: #f4f4f5;
-    --sidebar-border: #27272a;
+    --sidebar-accent: #2a2724;
+    --sidebar-accent-foreground: #f3efe7;
+    --sidebar-border: #2a2724;
     --sidebar-ring: #d4d4d8;
   }
 }
