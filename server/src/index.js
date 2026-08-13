@@ -3,9 +3,13 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
-import { connectDB } from "./config/db.js";
+// import { connectDB } from "./config/db.js";
+import connectDB from "./config/db.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { env } from "./config/env.js";
+import dns from "node:dns";
+
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 // route imports
 
@@ -32,3 +36,6 @@ const start = async () => {
     console.log(`Server running in ${env.NODE_ENV} mode on port ${PORT}`);
   });
 };
+
+// start the server
+start();

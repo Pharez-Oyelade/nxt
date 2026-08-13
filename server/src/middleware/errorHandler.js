@@ -1,4 +1,6 @@
-import { StatusCodes, statusCodes } from "http-status-codes";
+import { StatusCodes } from "http-status-codes";
+// import pkg from "http-status-codes";
+// const { StatusCodes } = pkg;
 
 export const errorHandler = (err, req, res, next) => {
   console.error(`[Error]: ${err.message}`);
