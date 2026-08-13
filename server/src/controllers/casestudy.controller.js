@@ -43,13 +43,22 @@ export const createCaseStudy = asyncHandler(async (req, res, next) => {
 
   let coverImage = [];
   if (req.file) {
-    const result = await cloudinary.uploader.upload(req.file.path, {
-      folder: "nxt/casestudies",
-    });
-    coverImage = [{
-      url: result.secure_url,
-      public_id: result.public_id,
-    }];
+    try {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "nxt/casestudies",
+      });
+      coverImage = [{
+        url: result.secure_url,
+        public_id: result.public_id,
+      }];
+    } catch (uploadError) {
+      console.error("Cloudinary Upload Error:", uploadError);
+      return res.status(400).json({ 
+        success: false, 
+        message: "Failed to upload image to Cloudinary. Please verify your Cloudinary API credentials in .env (403 Forbidden).",
+        error: uploadError.message
+      });
+    }
   }
 
   const newCaseStudy = await CaseStudy.create({
