@@ -28,7 +28,10 @@ const userSchema = new mongoose.Schema({
     ref: "Client",
     required: false,
   },
-  timestamps: true,
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 const User = mongoose.models.user || mongoose.model("user", userSchema);

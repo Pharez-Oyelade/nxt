@@ -9,9 +9,10 @@ import { errorHandler } from "./middleware/errorHandler.js";
 import { env } from "./config/env.js";
 import dns from "node:dns";
 
-dns.setServers(["8.8.8.8", "8.8.4.4"]);
-
 // route imports
+import authRouter from "./routes/auth.routes.js";
+
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use(cookieParser());
 
 // routes
 app.get("/", (req, res) => res.json({ message: "API running" }));
+app.use("/api/v1/auth", authRouter);
 
 // error handler
 app.use(errorHandler);
