@@ -1,8 +1,8 @@
-import BlogPost from "../models/blogPostModel";
-import asyncHandler from "../utils/asyncHandler";
-import cloudinary from "../config/cloudinary";
+import BlogPost from "../models/blogPostModel.js";
+import asyncHandler from "../utils/asyncHandler.js";
+import cloudinary from "../config/cloudinary.js";
 import slugify from "slugify";
-import { AppError } from "../middleware/errorHandler";
+import { AppError } from "../middleware/errorHandler.js";
 import { StatusCodes } from "http-status-codes";
 import fs from "fs";
 
@@ -50,6 +50,19 @@ export const createBlogPost = asyncHandler(async (req, res, next) => {
   const { title, body, status } = req.body;
   let { slug } = req.body;
 
+  let parsedTags = [];
+  if (req.body.tags) {
+    try {
+      parsedTags = JSON.parse(req.body.tags);
+    } catch (e) {
+      if (Array.isArray(req.body.tags)) {
+        parsedTags = req.body.tags;
+      } else if (typeof req.body.tags === "string") {
+        parsedTags = req.body.tags.split(",").map((t) => t.trim()).filter(Boolean);
+      }
+    }
+  }
+
   if (!title) {
     throw new AppError("Title is required", StatusCodes.BAD_REQUEST);
   }
@@ -89,6 +102,7 @@ export const createBlogPost = asyncHandler(async (req, res, next) => {
     title,
     body,
     slug,
+    tags: parsedTags,
     coverImage,
     status: postStatus,
     publishedAt: postStatus === "published" ? new Date() : null,
@@ -109,8 +123,23 @@ export const updateBlogPost = asyncHandler(async (req, res, next) => {
   const { title, body, status } = req.body;
   let { slug } = req.body;
 
+  let parsedTags = undefined;
+  if (req.body.tags !== undefined) {
+    try {
+      parsedTags = JSON.parse(req.body.tags);
+    } catch (e) {
+      if (Array.isArray(req.body.tags)) {
+        parsedTags = req.body.tags;
+      } else if (typeof req.body.tags === "string") {
+        parsedTags = req.body.tags.split(",").map((t) => t.trim()).filter(Boolean);
+      }
+    }
+  }
+
   if (title) blogPost.title = title;
   if (body !== undefined) blogPost.body = body;
+  if (parsedTags !== undefined) blogPost.tags = parsedTags;
+  
   if (status === "published" && blogPost.publishedAt === null) {
     blogPost.status = status;
     blogPost.publishedAt = new Date();

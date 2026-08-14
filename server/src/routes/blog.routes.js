@@ -1,5 +1,5 @@
 import express from "express";
-import { protect, restrictTo } from "../middleware/auth";
+import { protect, restrictTo } from "../middleware/auth.js";
 import {
   createBlogPost,
   getBlogPosts,
@@ -8,8 +8,8 @@ import {
   getPublishedPost,
   updateBlogPost,
   deleteBlogPost,
-} from "../controllers/blog.controller";
-import { upload } from "../middleware/multer";
+} from "../controllers/blog.controller.js";
+import { upload } from "../middleware/multer.js";
 
 const blogRouter = express.Router();
 
