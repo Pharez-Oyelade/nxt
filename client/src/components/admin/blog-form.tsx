@@ -27,7 +27,7 @@ const formSchema = z.object({
   status: z.enum(["draft", "published", "archived"]),
   coverImage: z.any().optional(),
   body: z.string().min(1, "Blog body is required"),
-  tags: z.array(z.string()).default([]),
+  tags: z.array(z.string()),
 });
 
 type BlogFormValues = z.infer<typeof formSchema>;
