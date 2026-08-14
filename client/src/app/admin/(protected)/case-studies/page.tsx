@@ -8,7 +8,14 @@ import {
   useUpdateCaseStudyStatus,
 } from "@/hooks/useCaseStudies";
 import { Button } from "@/components/ui/button";
-import { Loader2, Plus } from "lucide-react";
+import {
+  Loader2,
+  Plus,
+  Archive,
+  BookDashed,
+  Book,
+  GalleryVerticalEnd,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { buttonVariants } from "@/components/ui/button";
@@ -25,15 +32,23 @@ export default function CaseStudiesPage() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const filter = (searchParams.get("filter") as "all" | "published" | "draft" | "archived") || "all";
-  
+  const filter =
+    (searchParams.get("filter") as
+      | "all"
+      | "published"
+      | "draft"
+      | "archived") || "all";
+
   const setFilter = (newFilter: string) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("filter", newFilter);
     router.push(`${pathname}?${params.toString()}`);
   };
 
-  const [viewMode, setViewMode, isMounted] = useLocalStorage<"card" | "list">("nxt-view-mode", "card");
+  const [viewMode, setViewMode, isMounted] = useLocalStorage<"card" | "list">(
+    "nxt-view-mode",
+    "card",
+  );
 
   const hasArchived = useMemo(
     () => caseStudies.some((cs) => cs.status === "archived"),
@@ -73,7 +88,7 @@ export default function CaseStudiesPage() {
     <div className="flex-1 space-y-8 p-4 md:p-8 pt-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-primary">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-primary">
             Case Studies
           </h2>
         </div>
@@ -83,27 +98,30 @@ export default function CaseStudiesPage() {
             className: "h-10 bg-accent hover:bg-accent/90 text-white shadow-md",
           })}
         >
-          <Plus className="w-4 h-4 mr-2" />
-          New Case Study
+          <Plus className="w-4 h-4" />
+          New <span className="hidden sm:inline mr-2">Case Study</span>
         </Link>
       </div>
 
       {!isLoading && !error && caseStudies.length > 0 && (
-        <div className="flex items-center justify-between border-b border-border/40 pb-4">
-          <div className="flex items-center space-x-2">
+        <div className="flex items-center justify-between gap-2 border-b border-border/40 pb-4">
+          <div className="flex items-center space-x-1 overflow-x-auto py-3 sm:px-1 scrollbar-hide">
             <Button
               variant={filter === "all" ? "default" : "ghost"}
               size="sm"
               onClick={() => setFilter("all")}
-              className={`rounded-full p-3 pt-4 ${filter === "all" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
+              className={`rounded-full p-3 sm:pt-4 sm:px-5 ${filter === "all" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
             >
-              All Active
+              {/* <GalleryVerticalEnd className="w-4 h-4 sm:hidden sm:mr-2 shrink-0" /> */}
+              {/* <span className="hidden sm:inline">All</span>
+               */}
+              All
             </Button>
             <Button
               variant={filter === "published" ? "default" : "ghost"}
               size="sm"
               onClick={() => setFilter("published")}
-              className={`rounded-full p-3 pt-4 ${filter === "published" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
+              className={`rounded-full p-3 sm:pt-4 sm:px-5 ${filter === "published" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
             >
               Published
             </Button>
@@ -111,7 +129,7 @@ export default function CaseStudiesPage() {
               variant={filter === "draft" ? "default" : "ghost"}
               size="sm"
               onClick={() => setFilter("draft")}
-              className={`rounded-full p-3 pt-4 ${filter === "draft" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
+              className={`rounded-full p-3 sm:pt-4 sm:px-5 ${filter === "draft" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
             >
               Drafts
             </Button>
@@ -120,14 +138,18 @@ export default function CaseStudiesPage() {
                 variant={filter === "archived" ? "default" : "ghost"}
                 size="sm"
                 onClick={() => setFilter("archived")}
-                className={`rounded-full px-5 ${filter === "archived" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
+                title="Archived"
+                className={`rounded-full p-3 sm:pt-4 sm:px-5 ${filter === "archived" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
               >
-                Archived
+                <Archive className="w-4 h-4 sm:hidden sm:mr-2 shrink-0" />
+                <span className="hidden sm:inline">Archived</span>
               </Button>
             )}
           </div>
 
-          <DataViewToggle view={viewMode} onViewChange={setViewMode} />
+          <div className="shrink-0">
+            <DataViewToggle view={viewMode} onViewChange={setViewMode} />
+          </div>
         </div>
       )}
 

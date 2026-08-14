@@ -87,23 +87,26 @@ export function CaseStudyCard({
       <DropdownMenuContent align="end" className="w-40 rounded-xl">
         <DropdownMenuItem
           render={
-            <Link href={`/admin/case-studies/${cs._id}/edit`} className="cursor-pointer" />
+            <Link
+              href={`/admin/case-studies/${cs._id}/edit`}
+              className="cursor-pointer"
+            />
           }
-          className="rounded-xl m-1"
+          className="rounded-lg m-1"
         >
           <Edit className="w-4 h-4 mr-2" />
           Edit
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => onArchive(cs._id, cs.status)}
-          className="cursor-pointer rounded-xl m-1"
+          className="cursor-pointer rounded-lg m-1"
         >
           <Archive className="w-4 h-4 mr-2" />
           {cs.status === "archived" ? "Unarchive" : "Archive"}
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => onDelete(cs._id)}
-          className="cursor-pointer text-destructive focus:bg-destructive/10 focus:text-destructive rounded-xl m-1"
+          className="cursor-pointer text-destructive focus:bg-destructive/40 focus:text-destructive rounded-lg m-1"
         >
           <Trash2 className="w-4 h-4 mr-2" />
           Delete
