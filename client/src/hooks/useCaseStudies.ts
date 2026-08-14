@@ -59,6 +59,26 @@ export const useUpdateCaseStudy = (id: string) => {
   });
 };
 
+export const useUpdateCaseStudyStatus = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ id, status }: { id: string; status: string }) => {
+      const formData = new FormData();
+      formData.append("status", status);
+      return updateCaseStudy(id, formData);
+    },
+    onSuccess: (data, variables) => {
+      notify.success("Status updated successfully");
+      queryClient.invalidateQueries({ queryKey: ["caseStudies"] });
+      queryClient.invalidateQueries({ queryKey: ["caseStudy", variables.id] });
+    },
+    onError: (error: any) => {
+      notify.error(error.message || "Failed to update status");
+    },
+  });
+};
+
 export const useDeleteCaseStudy = () => {
   const queryClient = useQueryClient();
 
