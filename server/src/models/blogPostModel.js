@@ -10,18 +10,14 @@ const blogPostSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  coverImage: [
-    {
-      url: {
-        type: String,
-        required: true,
-      },
-      public_id: {
-        type: String,
-        required: true,
-      },
+  coverImage: {
+    url: {
+      type: String,
     },
-  ],
+    public_id: {
+      type: String,
+    },
+  },
   body: {
     type: String,
     required: true,
@@ -39,6 +35,7 @@ const blogPostSchema = new mongoose.Schema({
   },
   publishedAt: {
     type: Date,
+    default: null,
   },
   createdAt: {
     type: Date,

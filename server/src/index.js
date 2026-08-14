@@ -13,6 +13,7 @@ import dns from "node:dns";
 // route imports
 import authRouter from "./routes/auth.routes.js";
 import casestudyRouter from "./routes/casestudy.routes.js";
+import blogRouter from "./routes/blog.routes.js";
 
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
@@ -30,6 +31,7 @@ app.use(cookieParser());
 app.get("/", (req, res) => res.json({ message: "API running" }));
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/casestudies", casestudyRouter);
+app.use("/api/v1/blogs", blogRouter);
 
 // error handler
 app.use(errorHandler);
