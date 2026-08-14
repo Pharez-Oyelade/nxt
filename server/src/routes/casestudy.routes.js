@@ -1,5 +1,5 @@
 import express from "express";
-import { createCaseStudy, getCaseStudies, getCaseStudy } from "../controllers/casestudy.controller.js";
+import { createCaseStudy, getCaseStudies, getCaseStudy, updateCaseStudy, deleteCaseStudy } from "../controllers/casestudy.controller.js";
 import { upload } from "../middleware/multer.js";
 import { protect, restrictTo } from "../middleware/auth.js";
 
@@ -10,6 +10,8 @@ router.route("/")
   .post(protect, restrictTo("admin"), upload.single("coverImage"), createCaseStudy);
 
 router.route("/:id")
-  .get(getCaseStudy);
+  .get(getCaseStudy)
+  .put(protect, restrictTo("admin"), upload.single("coverImage"), updateCaseStudy)
+  .delete(protect, restrictTo("admin"), deleteCaseStudy);
 
 export default router;

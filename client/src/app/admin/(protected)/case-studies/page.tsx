@@ -1,20 +1,72 @@
 "use client";
 
-import { useGetCaseStudies, useDeleteCaseStudy } from "@/hooks/useCaseStudies";
-import { Button } from "@/components/ui/button";
-import { Loader2, Plus, MoreVertical, Edit, Trash2 } from "lucide-react";
-import Link from "next/link";
+import { useState, useEffect, useMemo } from "react";
+
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  useGetCaseStudies,
+  useDeleteCaseStudy,
+  useUpdateCaseStudyStatus,
+} from "@/hooks/useCaseStudies";
+import { Button } from "@/components/ui/button";
+import {
+  Loader2,
+  Plus,
+  Archive,
+  BookDashed,
+  Book,
+  GalleryVerticalEnd,
+} from "lucide-react";
+import Link from "next/link";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { buttonVariants } from "@/components/ui/button";
+import { DataViewToggle, DataViewLayout } from "@/components/ui/data-view";
+import { CaseStudyCard } from "@/components/admin/case-study-card";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 export default function CaseStudiesPage() {
   const { data: caseStudies = [], isLoading, error } = useGetCaseStudies();
   const deleteMutation = useDeleteCaseStudy();
+  const statusMutation = useUpdateCaseStudyStatus();
+
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const filter =
+    (searchParams.get("filter") as
+      | "all"
+      | "published"
+      | "draft"
+      | "archived") || "all";
+
+  const setFilter = (newFilter: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("filter", newFilter);
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  const [viewMode, setViewMode, isMounted] = useLocalStorage<"card" | "list">(
+    "nxt-view-mode",
+    "card",
+  );
+
+  const hasArchived = useMemo(
+    () => caseStudies.some((cs) => cs.status === "archived"),
+    [caseStudies],
+  );
+
+  // Fallback to "all" if viewing archived but there are no archived items anymore
+  useEffect(() => {
+    if (filter === "archived" && !hasArchived && caseStudies.length > 0) {
+      setFilter("all");
+    }
+  }, [hasArchived, filter, caseStudies.length]);
+
+  const filteredCaseStudies = useMemo(() => {
+    if (filter === "all")
+      return caseStudies.filter((cs) => cs.status !== "archived");
+    return caseStudies.filter((cs) => cs.status === filter);
+  }, [caseStudies, filter]);
 
   const handleDelete = async (id: string) => {
     if (confirm("Are you sure you want to delete this case study?")) {
@@ -22,16 +74,23 @@ export default function CaseStudiesPage() {
     }
   };
 
+  const handleToggleStatus = async (id: string, currentStatus: string) => {
+    const newStatus = currentStatus === "published" ? "draft" : "published";
+    await statusMutation.mutateAsync({ id, status: newStatus });
+  };
+
+  const handleArchive = async (id: string, currentStatus: string) => {
+    const newStatus = currentStatus === "archived" ? "draft" : "archived";
+    await statusMutation.mutateAsync({ id, status: newStatus });
+  };
+
   return (
     <div className="flex-1 space-y-8 p-4 md:p-8 pt-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-primary">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-primary">
             Case Studies
           </h2>
-          <p className="text-muted-foreground mt-1">
-            Manage your agency's portfolio and case studies.
-          </p>
         </div>
         <Link
           href="/admin/case-studies/new"
@@ -39,10 +98,60 @@ export default function CaseStudiesPage() {
             className: "h-10 bg-accent hover:bg-accent/90 text-white shadow-md",
           })}
         >
-          <Plus className="w-4 h-4 mr-2" />
-          New Case Study
+          <Plus className="w-4 h-4" />
+          New <span className="hidden sm:inline mr-2">Case Study</span>
         </Link>
       </div>
+
+      {!isLoading && !error && caseStudies.length > 0 && (
+        <div className="flex items-center justify-between gap-2 border-b border-border/40 pb-4">
+          <div className="flex items-center space-x-1 overflow-x-auto py-3 sm:px-1 scrollbar-hide">
+            <Button
+              variant={filter === "all" ? "default" : "ghost"}
+              size="sm"
+              onClick={() => setFilter("all")}
+              className={`rounded-full p-3 sm:pt-4 sm:px-5 ${filter === "all" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
+            >
+              {/* <GalleryVerticalEnd className="w-4 h-4 sm:hidden sm:mr-2 shrink-0" /> */}
+              {/* <span className="hidden sm:inline">All</span>
+               */}
+              All
+            </Button>
+            <Button
+              variant={filter === "published" ? "default" : "ghost"}
+              size="sm"
+              onClick={() => setFilter("published")}
+              className={`rounded-full p-3 sm:pt-4 sm:px-5 ${filter === "published" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
+            >
+              Published
+            </Button>
+            <Button
+              variant={filter === "draft" ? "default" : "ghost"}
+              size="sm"
+              onClick={() => setFilter("draft")}
+              className={`rounded-full p-3 sm:pt-4 sm:px-5 ${filter === "draft" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
+            >
+              Drafts
+            </Button>
+            {hasArchived && (
+              <Button
+                variant={filter === "archived" ? "default" : "ghost"}
+                size="sm"
+                onClick={() => setFilter("archived")}
+                title="Archived"
+                className={`rounded-full p-3 sm:pt-4 sm:px-5 ${filter === "archived" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
+              >
+                <Archive className="w-4 h-4 sm:hidden sm:mr-2 shrink-0" />
+                <span className="hidden sm:inline">Archived</span>
+              </Button>
+            )}
+          </div>
+
+          <div className="shrink-0">
+            <DataViewToggle view={viewMode} onViewChange={setViewMode} />
+          </div>
+        </div>
+      )}
 
       {isLoading ? (
         <div className="flex flex-col items-center justify-center min-h-[400px] text-muted-foreground">
@@ -77,107 +186,30 @@ export default function CaseStudiesPage() {
             Create First Case Study
           </Link>
         </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {caseStudies.map((cs) => (
-            <div
-              key={cs._id}
-              className="group flex flex-col bg-card border border-border/50 rounded-2xl overflow-hidden hover:shadow-lg hover:border-accent/30 transition-all duration-300"
-            >
-              <div className="relative aspect-video w-full bg-muted/30 overflow-hidden">
-                {cs.coverImage && cs.coverImage.length > 0 ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={cs.coverImage[0].url}
-                    alt={cs.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-muted-foreground/30 text-sm font-medium">
-                    No cover image
-                  </div>
-                )}
-
-                <div className="absolute top-3 left-3">
-                  <span
-                    className={`px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider rounded-full backdrop-blur-md shadow-sm
-                    ${
-                      cs.status === "published"
-                        ? "bg-green-500/80 text-white"
-                        : cs.status === "draft"
-                          ? "bg-black/50 text-white"
-                          : "bg-orange-500/80 text-white"
-                    }`}
-                  >
-                    {cs.status}
-                  </span>
-                </div>
-
-                <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger
-                      render={
-                        <Button
-                          variant="secondary"
-                          size="icon"
-                          className="w-8 h-8 rounded-full bg-white/90 hover:bg-white text-black shadow-sm"
-                        />
-                      }
-                    >
-                      <MoreVertical className="w-4 h-4" />
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent
-                      align="end"
-                      className="w-40 rounded-xl"
-                    >
-                      <DropdownMenuItem
-                        render={
-                          <Link
-                            href={`/admin/case-studies/${cs._id}/edit`}
-                            className="cursor-pointer"
-                          />
-                        }
-                        className="rounded-xl m-1"
-                      >
-                        <Edit className="w-4 h-4 mr-2" />
-                        Edit
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => handleDelete(cs._id)}
-                        className="cursor-pointer text-destructive focus:bg-destructive/10 focus:text-destructive rounded-xl m-1"
-                      >
-                        <Trash2 className="w-4 h-4 mr-2" />
-                        Delete
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-              </div>
-
-              <div className="p-5 flex-1 flex flex-col">
-                <h3 className="font-semibold text-lg line-clamp-1 group-hover:text-accent transition-colors">
-                  {cs.title}
-                </h3>
-                <p className="text-sm text-muted-foreground mt-1.5 line-clamp-2 flex-1">
-                  {cs.description || "No description provided."}
-                </p>
-
-                <div className="flex items-center justify-between mt-4 pt-4 border-t border-border/40">
-                  <span className="text-[11px] font-medium text-muted-foreground">
-                    {new Date(cs.createdAt).toLocaleDateString(undefined, {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                    })}
-                  </span>
-                  <span className="text-[11px] font-medium text-muted-foreground">
-                    Order: {cs.order}
-                  </span>
-                </div>
-              </div>
-            </div>
-          ))}
+      ) : filteredCaseStudies.length === 0 ? (
+        <div className="flex flex-col items-center justify-center min-h-[300px] border border-dashed border-border/60 rounded-2xl bg-card">
+          <p className="text-muted-foreground">
+            No case studies found in this view.
+          </p>
         </div>
+      ) : !isMounted ? (
+        <div className="flex justify-center items-center h-64 text-muted-foreground">
+          <Loader2 className="w-8 h-8 animate-spin" />
+        </div>
+      ) : (
+        <DataViewLayout view={viewMode}>
+          {filteredCaseStudies.map((cs) => (
+            <CaseStudyCard
+              key={cs._id}
+              cs={cs}
+              view={viewMode}
+              onDelete={handleDelete}
+              onArchive={handleArchive}
+              onToggleStatus={handleToggleStatus}
+              isStatusPending={statusMutation.isPending}
+            />
+          ))}
+        </DataViewLayout>
       )}
     </div>
   );
