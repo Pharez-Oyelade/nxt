@@ -15,7 +15,7 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-  title: "Studio Ink.",
+  title: "NXT",
   description: "Strategy · Identity · Engineering",
 };
 export default function RootLayout({
