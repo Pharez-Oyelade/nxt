@@ -2,20 +2,29 @@
 
 import { useState } from "react";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { useCreateLead } from "@/hooks/useLeads";
 
 export default function ContactForm() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { mutateAsync, isPending } = useCreateLead();
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSubmitting(true);
+    
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      name: formData.get("name") as string,
+      email: formData.get("email") as string,
+      company: formData.get("company") as string,
+      message: formData.get("project") as string,
+    };
 
-    // Simulate API call for lead generation
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    setIsSubmitting(false);
-    setIsSuccess(true);
+    try {
+      await mutateAsync(data);
+      setIsSuccess(true);
+    } catch (error) {
+      // Error toast is handled in the hook
+    }
   };
 
   return (
@@ -64,6 +73,7 @@ export default function ContactForm() {
                 </label>
                 <input
                   id="name"
+                  name="name"
                   type="text"
                   required
                   placeholder="John Doe"
@@ -80,6 +90,7 @@ export default function ContactForm() {
                 </label>
                 <input
                   id="email"
+                  name="email"
                   type="email"
                   required
                   placeholder="john@example.com"
@@ -91,6 +102,7 @@ export default function ContactForm() {
                 <label htmlFor="company" className="text-sm font-medium text-foreground/80 pl-1">Company <span className="text-muted-foreground/60 font-normal">(Optional)</span></label>
                 <input 
                   id="company"
+                  name="company"
                   type="text" 
                   placeholder="Acme Inc."
                   className="w-full bg-background border border-border rounded-xl px-4 py-3 outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-muted-foreground/50"
@@ -106,6 +118,7 @@ export default function ContactForm() {
                 </label>
                 <textarea
                   id="project"
+                  name="project"
                   required
                   rows={4}
                   placeholder="Tell us about what you're building..."
@@ -115,10 +128,10 @@ export default function ContactForm() {
 
               <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isPending}
                 className="group w-full bg-foreground text-background hover:bg-primary hover:text-primary-foreground font-medium rounded-xl px-6 py-4 mt-2 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                {isSubmitting ? (
+                {isPending ? (
                   <span className="animate-pulse">Sending...</span>
                 ) : (
                   <>
