@@ -6,6 +6,12 @@ export const getBlogs = async () => {
   return response.data.blogPosts;
 };
 
+// Fetch all published blogs (public view)
+export const getPublishedBlogs = async () => {
+  const response = await api.get("/blogs");
+  return response.data.blogPosts;
+};
+
 // Fetch a single blog by ID
 export const getBlog = async (id: string) => {
   const response = await api.get(`/blogs/admin/${id}`);
