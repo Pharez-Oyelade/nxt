@@ -113,3 +113,23 @@ export const createAdminLead = asyncHandler(async (req, res) => {
 
   res.status(StatusCodes.CREATED).json({ lead });
 });
+
+// Update a lead's status
+export const updateLeadStatus = asyncHandler(async (req, res) => {
+  const { status } = req.body;
+
+  if (!status) {
+    throw new AppError("Please provide a valid status", StatusCodes.BAD_REQUEST);
+  }
+
+  const lead = await Lead.findById(req.params.id);
+
+  if (!lead) {
+    throw new AppError("Lead not found", StatusCodes.NOT_FOUND);
+  }
+
+  lead.status = status;
+  await lead.save();
+
+  res.json({ lead });
+});
