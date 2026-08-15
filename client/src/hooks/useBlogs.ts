@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   getBlogs,
+  getPublishedBlogs,
   getBlog,
   createBlog,
   updateBlog,
@@ -14,6 +15,13 @@ export const useGetBlogs = () => {
   return useQuery({
     queryKey: ["blogs"],
     queryFn: getBlogs,
+  });
+};
+
+export const useGetPublishedBlogs = () => {
+  return useQuery({
+    queryKey: ["publishedBlogs"],
+    queryFn: getPublishedBlogs,
   });
 };
 

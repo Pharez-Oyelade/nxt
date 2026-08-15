@@ -32,7 +32,7 @@ const servicesData = [
 
 export default function Services() {
   return (
-    <section id="services" className=" w-full gap-20 py-20">
+    <section id="services" className=" w-full py-5">
       <div className="px-8 md:px-30 pb-20">
         <h3 className="text-2xl md:text-4xl font-bold font-fraunces">
           What NXT does
