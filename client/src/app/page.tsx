@@ -8,6 +8,7 @@ import FounderCard from "@/components/marketing/FounderCard";
 import BlogSection from "@/components/marketing/BlogSection";
 import Testimonials from "@/components/marketing/Testimonials";
 import ContactForm from "@/components/marketing/ContactForm";
+import Footer from "@/components/marketing/Footer";
 
 export default function Home() {
   return (
@@ -24,6 +25,7 @@ export default function Home() {
         <Testimonials />
         <ContactForm />
       </main>
+      <Footer />
     </>
   );
 }
