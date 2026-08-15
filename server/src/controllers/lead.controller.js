@@ -1,0 +1,115 @@
+import asyncHandler from "../utils/asyncHandler.js";
+import { AppError } from "../middleware/errorHandler.js";
+import { StatusCodes } from "http-status-codes";
+import Lead from "../models/leadModel.js";
+
+// Get all leads
+export const getLeads = asyncHandler(async (req, res) => {
+  const leads = await Lead.find();
+
+  res.json({ leads });
+});
+
+// Get single lead
+export const getLead = asyncHandler(async (req, res) => {
+  const lead = await Lead.findById(req.params.id);
+
+  if (!lead) {
+    throw new AppError("Lead not found", StatusCodes.NOT_FOUND);
+  }
+
+  res.json({ lead });
+});
+
+// Create a lead
+export const createLead = asyncHandler(async (req, res) => {
+  const name = req.body.name?.trim();
+  const email = req.body.email?.trim().toLowerCase();
+  const company = req.body.company?.trim();
+  const message = req.body.message?.trim();
+
+  if (!name || !email || !message) {
+    throw new AppError(
+      "Please provide all required fields",
+      StatusCodes.BAD_REQUEST,
+    );
+  }
+
+  // Check if this person already exists
+  const existingLead = await Lead.findOne({ email });
+
+  if (existingLead) {
+    existingLead.name = name;
+    // existingLead.company = company;
+    existingLead.messages.push(message);
+
+    if (company) {
+      existingLead.company = company;
+    }
+
+    await existingLead.save();
+
+    return res.json({ lead: existingLead });
+  }
+
+  const lead = await Lead.create({
+    name,
+    email,
+    company,
+    messages: [message],
+  });
+
+  res.status(StatusCodes.CREATED).json({ lead });
+});
+
+// create lead admin
+export const createAdminLead = asyncHandler(async (req, res) => {
+  const name = req.body.name?.trim();
+  const email = req.body.email?.trim().toLowerCase();
+  const company = req.body.company?.trim();
+  const message = req.body.message?.trim();
+  const { projectType, budgetRange, status } = req.body;
+
+  if (!name || !email || !message) {
+    throw new AppError(
+      "Please provide all required fields",
+      StatusCodes.BAD_REQUEST,
+    );
+  }
+
+  // Check if this person already exists
+  const existingLead = await Lead.findOne({ email });
+
+  if (existingLead) {
+    existingLead.name = name;
+    // existingLead.company = company;
+    existingLead.projectType = projectType;
+    existingLead.budgetRange = budgetRange;
+
+    if (company) {
+      existingLead.company = company;
+    }
+
+    if (status) {
+      existingLead.status = status;
+    }
+
+    existingLead.messages.push(message);
+
+    await existingLead.save();
+
+    return res.json({ lead: existingLead });
+  }
+
+  const lead = await Lead.create({
+    name,
+    email,
+    company,
+    projectType: projectType,
+    budgetRange: budgetRange,
+    status,
+    messages: [message],
+  });
+
+  res.status(StatusCodes.CREATED).json({ lead });
+});
