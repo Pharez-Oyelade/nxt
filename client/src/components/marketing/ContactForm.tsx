@@ -88,6 +88,16 @@ export default function ContactForm() {
               </div>
 
               <div className="space-y-2">
+                <label htmlFor="company" className="text-sm font-medium text-foreground/80 pl-1">Company <span className="text-muted-foreground/60 font-normal">(Optional)</span></label>
+                <input 
+                  id="company"
+                  type="text" 
+                  placeholder="Acme Inc."
+                  className="w-full bg-background border border-border rounded-xl px-4 py-3 outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-muted-foreground/50"
+                />
+              </div>
+
+              <div className="space-y-2">
                 <label
                   htmlFor="project"
                   className="text-sm font-medium text-foreground/80 pl-1"
