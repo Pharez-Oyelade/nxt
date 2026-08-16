@@ -3,12 +3,14 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Lead } from "@/services/leads";
 import { Mail, Briefcase, GripVertical } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface KanbanCardProps {
   lead: Lead;
 }
 
 export function KanbanCard({ lead }: KanbanCardProps) {
+  const router = useRouter();
   const {
     attributes,
     listeners,
@@ -43,8 +45,15 @@ export function KanbanCard({ lead }: KanbanCardProps) {
         <GripVertical className="w-4 h-4" />
       </div>
       
-      <div className="pr-6">
-        <h4 className="font-semibold text-primary line-clamp-1">{lead.name}</h4>
+      <div 
+        className="pr-6 cursor-pointer"
+        onPointerDown={(e) => {
+          // Prevent drag from starting if we are just clicking the text/content area
+          // but actually dnd-kit allows clicking just fine if it's not dragged.
+        }}
+        onClick={() => router.push(`/admin/leads/${lead._id}`)}
+      >
+        <h4 className="font-semibold text-primary line-clamp-1 hover:underline">{lead.name}</h4>
         
         <div className="flex flex-col gap-1.5 mt-2.5">
           <div className="flex items-center text-xs text-muted-foreground">

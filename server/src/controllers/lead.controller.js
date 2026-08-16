@@ -133,3 +133,29 @@ export const updateLeadStatus = asyncHandler(async (req, res) => {
 
   res.json({ lead });
 });
+
+// Update full lead details (Admin)
+export const updateLead = asyncHandler(async (req, res) => {
+  const { name, email, company, projectType, budgetRange, status, newMessage } = req.body;
+
+  const lead = await Lead.findById(req.params.id);
+
+  if (!lead) {
+    throw new AppError("Lead not found", StatusCodes.NOT_FOUND);
+  }
+
+  if (name) lead.name = name;
+  if (email) lead.email = email;
+  if (company !== undefined) lead.company = company;
+  if (projectType !== undefined) lead.projectType = projectType;
+  if (budgetRange !== undefined) lead.budgetRange = budgetRange;
+  if (status) lead.status = status;
+  
+  if (newMessage && newMessage.trim().length > 0) {
+    lead.messages.push(newMessage.trim());
+  }
+
+  await lead.save();
+
+  res.json({ lead });
+});

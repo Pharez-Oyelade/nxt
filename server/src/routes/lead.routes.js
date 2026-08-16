@@ -6,6 +6,7 @@ import {
   createLead,
   createAdminLead,
   updateLeadStatus,
+  updateLead,
 } from "../controllers/lead.controller.js";
 
 const leadRouter = express.Router();
@@ -22,6 +23,13 @@ leadRouter.put(
   protect,
   restrictTo("admin"),
   updateLeadStatus
+);
+
+leadRouter.put(
+  "/admin/:id",
+  protect,
+  restrictTo("admin"),
+  updateLead
 );
 
 leadRouter.post("/", createLead);

@@ -37,7 +37,17 @@ export const getLeads = async (): Promise<Lead[]> => {
   return response.data.leads;
 };
 
+export const getLead = async (id: string): Promise<Lead> => {
+  const response = await api.get(`/leads/${id}`);
+  return response.data.lead;
+};
+
 export const updateLeadStatus = async (id: string, status: string): Promise<Lead> => {
   const response = await api.put(`/leads/admin/${id}/status`, { status });
+  return response.data.lead;
+};
+
+export const updateLead = async (id: string, data: Partial<Lead> & { newMessage?: string }): Promise<Lead> => {
+  const response = await api.put(`/leads/admin/${id}`, data);
   return response.data.lead;
 };

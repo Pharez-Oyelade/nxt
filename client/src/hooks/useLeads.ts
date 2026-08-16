@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createLead, getLeads, updateLeadStatus, createAdminLead } from "../services/leads";
+import { createLead, getLeads, getLead, updateLeadStatus, updateLead, createAdminLead } from "../services/leads";
 import { notify } from "@/lib/toast";
 import { useRouter } from "next/navigation";
 
@@ -52,6 +52,30 @@ export const useCreateAdminLead = () => {
         error.message || 
         "Failed to create lead"
       );
+    },
+  });
+};
+
+export const useGetLead = (id: string) => {
+  return useQuery({
+    queryKey: ["leads", id],
+    queryFn: () => getLead(id),
+    enabled: !!id,
+  });
+};
+
+export const useUpdateLead = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: any }) => updateLead(id, data),
+    onSuccess: (data, variables) => {
+      notify.success("Lead updated successfully");
+      queryClient.invalidateQueries({ queryKey: ["leads"] });
+      queryClient.invalidateQueries({ queryKey: ["leads", variables.id] });
+    },
+    onError: (error: any) => {
+      notify.error(error.message || "Failed to update lead");
     },
   });
 };
