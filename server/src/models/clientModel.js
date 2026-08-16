@@ -5,19 +5,36 @@ const clientSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  billingEmail: {
+  email: {
     type: String,
     unique: true,
+    required: true,
+  },
+  billingEmail: {
+    type: String,
+    // unique: true,
+    default: null,
   },
   industry: {
     type: String,
+    default: null,
   },
   primaryContactName: {
     type: String,
   },
-  notes: {
+  projectType: {
     type: String,
+    default: null,
   },
+  budgetRange: {
+    type: String,
+    default: null,
+  },
+  notes: [
+    {
+      type: String,
+    },
+  ],
   status: {
     type: String,
     enum: ["prospect", "active", "past"],

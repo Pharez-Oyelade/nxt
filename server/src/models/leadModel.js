@@ -35,6 +35,10 @@ const leadSchema = new mongoose.Schema({
     enum: ["new", "contacted", "qualified", "lost"],
     default: "new",
   },
+  archived: {
+    type: Boolean,
+    default: false,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
