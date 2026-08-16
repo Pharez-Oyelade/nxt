@@ -2,8 +2,8 @@
 
 import React, { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { useGetLead, useUpdateLead } from "@/hooks/useLeads";
-import { Loader2, ArrowLeft, Send } from "lucide-react";
+import { useGetLead, useUpdateLead, useConvertLead } from "@/hooks/useLeads";
+import { Loader2, ArrowLeft, Send, UserPlus } from "lucide-react";
 import Link from "next/link";
 import { EditableField } from "@/components/admin/leads/editable-field";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,7 @@ export default function LeadDetailPage() {
   
   const { data: lead, isLoading, error } = useGetLead(leadId);
   const updateMutation = useUpdateLead();
+  const convertMutation = useConvertLead();
   
   const [newMessage, setNewMessage] = useState("");
 
@@ -41,6 +42,12 @@ export default function LeadDetailPage() {
     });
     
     setNewMessage("");
+  };
+
+  const handleConvert = async () => {
+    if (confirm("Are you sure you want to convert this lead to an active client? This action will archive the lead and create a new Client record.")) {
+      await convertMutation.mutateAsync(leadId);
+    }
   };
 
   if (isLoading) {
@@ -64,16 +71,31 @@ export default function LeadDetailPage() {
 
   return (
     <div className="flex-1 p-4 md:p-8 pt-6 max-w-5xl mx-auto space-y-6 w-full">
-      <div className="flex items-center gap-4">
-        <Link
-          href="/admin/leads"
-          className="inline-flex items-center justify-center h-10 w-10 rounded-full hover:bg-muted transition-colors text-muted-foreground"
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <Link
+            href="/admin/leads"
+            className="inline-flex items-center justify-center h-10 w-10 rounded-full hover:bg-muted transition-colors text-muted-foreground"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </Link>
+          <h2 className="text-3xl font-bold tracking-tight text-primary">
+            Lead Details
+          </h2>
+        </div>
+        
+        <Button 
+          onClick={handleConvert}
+          disabled={convertMutation.isPending || lead.archived}
+          className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-md h-10 rounded-xl"
         >
-          <ArrowLeft className="w-5 h-5" />
-        </Link>
-        <h2 className="text-3xl font-bold tracking-tight text-primary">
-          Lead Details
-        </h2>
+          {convertMutation.isPending ? (
+            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+          ) : (
+            <UserPlus className="w-4 h-4 mr-2" />
+          )}
+          {lead.archived ? "Converted" : "Convert to Client"}
+        </Button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

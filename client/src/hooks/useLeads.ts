@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createLead, getLeads, getLead, updateLeadStatus, updateLead, createAdminLead } from "../services/leads";
+import { createLead, getLeads, getLead, updateLeadStatus, updateLead, createAdminLead, convertLeadToClient } from "../services/leads";
 import { notify } from "@/lib/toast";
 import { useRouter } from "next/navigation";
 
@@ -76,6 +76,29 @@ export const useUpdateLead = () => {
     },
     onError: (error: any) => {
       notify.error(error.message || "Failed to update lead");
+    },
+  });
+};
+
+export const useConvertLead = () => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: (id: string) => convertLeadToClient(id),
+    onSuccess: (data) => {
+      notify.success("Lead converted to client successfully");
+      queryClient.invalidateQueries({ queryKey: ["leads"] });
+      queryClient.invalidateQueries({ queryKey: ["clients"] });
+      // Redirect to the new client's page
+      router.push(`/admin/clients/${data.client._id}`);
+    },
+    onError: (error: any) => {
+      notify.error(
+        error.response?.data?.message || 
+        error.message || 
+        "Failed to convert lead"
+      );
     },
   });
 };

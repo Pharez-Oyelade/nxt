@@ -51,3 +51,8 @@ export const updateLead = async (id: string, data: Partial<Lead> & { newMessage?
   const response = await api.put(`/leads/admin/${id}`, data);
   return response.data.lead;
 };
+
+export const convertLeadToClient = async (id: string) => {
+  const response = await api.post(`/leads/admin/convert/${id}`);
+  return response.data;
+};
