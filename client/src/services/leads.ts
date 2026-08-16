@@ -29,6 +29,7 @@ export interface Lead {
   budgetRange?: string;
   status: "new" | "contacted" | "qualified" | "lost";
   messages: string[];
+  archived: boolean;
   createdAt: string;
 }
 
