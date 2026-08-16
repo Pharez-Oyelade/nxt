@@ -3,6 +3,7 @@ import { AppError } from "../middleware/errorHandler.js";
 import { StatusCodes } from "http-status-codes";
 import Client from "../models/clientModel.js";
 import Lead from "../models/leadModel.js";
+import Project from "../models/projectModel.js";
 import { createClientAndInviteUser } from "../../services/clientService.js";
 
 // Get all clients
@@ -39,6 +40,12 @@ export const createClient = asyncHandler(async (req, res) => {
     industry,
     billingEmail,
     notes,
+  });
+
+  const project = await Project.create({
+    clientId: client._id,
+    title: `${client.companyName} - Project`,
+    phase: "discovery",
   });
 
   res.status(StatusCodes.CREATED).json({

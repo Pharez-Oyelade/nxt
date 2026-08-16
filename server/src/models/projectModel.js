@@ -16,7 +16,6 @@ const projectSchema = new mongoose.Schema({
       "discovery",
       "design",
       "development",
-      "testing",
       "review",
       "delivered",
       "maintenance",
@@ -35,7 +34,18 @@ const projectSchema = new mongoose.Schema({
   ],
   files: [
     {
-      type: String,
+      url: {
+        type: String,
+        required: true,
+      },
+      public_id: {
+        type: String,
+        required: true,
+      },
+      name: {
+        type: String,
+        required: true,
+      },
     },
   ],
   createdAt: {
