@@ -2,10 +2,12 @@ import asyncHandler from "../utils/asyncHandler.js";
 import { AppError } from "../middleware/errorHandler.js";
 import { StatusCodes } from "http-status-codes";
 import Lead from "../models/leadModel.js";
+import { createClientAndInviteUser } from "../../services/clientService.js";
+import Project from "../models/projectModel.js";
 
 // Get all leads
 export const getLeads = asyncHandler(async (req, res) => {
-  const leads = await Lead.find();
+  const leads = await Lead.find({ archived: false });
 
   res.json({ leads });
 });
@@ -119,7 +121,10 @@ export const updateLeadStatus = asyncHandler(async (req, res) => {
   const { status } = req.body;
 
   if (!status) {
-    throw new AppError("Please provide a valid status", StatusCodes.BAD_REQUEST);
+    throw new AppError(
+      "Please provide a valid status",
+      StatusCodes.BAD_REQUEST,
+    );
   }
 
   const lead = await Lead.findById(req.params.id);
@@ -136,7 +141,8 @@ export const updateLeadStatus = asyncHandler(async (req, res) => {
 
 // Update full lead details (Admin)
 export const updateLead = asyncHandler(async (req, res) => {
-  const { name, email, company, projectType, budgetRange, status, newMessage } = req.body;
+  const { name, email, company, projectType, budgetRange, status, newMessage } =
+    req.body;
 
   const lead = await Lead.findById(req.params.id);
 
@@ -150,7 +156,7 @@ export const updateLead = asyncHandler(async (req, res) => {
   if (projectType !== undefined) lead.projectType = projectType;
   if (budgetRange !== undefined) lead.budgetRange = budgetRange;
   if (status) lead.status = status;
-  
+
   if (newMessage && newMessage.trim().length > 0) {
     lead.messages.push(newMessage.trim());
   }
@@ -158,4 +164,37 @@ export const updateLead = asyncHandler(async (req, res) => {
   await lead.save();
 
   res.json({ lead });
+});
+
+// convert lead to client
+export const convertLeadToClient = asyncHandler(async (req, res) => {
+  const lead = await Lead.findById(req.params.id);
+  if (!lead) throw new AppError("Lead not found", StatusCodes.NOT_FOUND);
+  if (lead.archived)
+    throw new AppError("Lead already converted", StatusCodes.BAD_REQUEST);
+
+  const { client, user, emailSent } = await createClientAndInviteUser({
+    companyName: lead.company,
+    contactName: lead.name,
+    email: lead.email,
+  });
+
+  const project = await Project.create({
+    clientId: client._id,
+    title: `${client.companyName} - Project`,
+    phase: "discovery",
+  });
+
+  lead.archived = true;
+  await lead.save();
+
+  res.status(StatusCodes.CREATED).json({
+    client,
+    project,
+    user: {
+      id: user._id,
+      email: user.email,
+    },
+    emailSent,
+  });
 });
