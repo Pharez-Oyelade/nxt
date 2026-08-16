@@ -29,6 +29,7 @@ export interface Lead {
   budgetRange?: string;
   status: "new" | "contacted" | "qualified" | "lost";
   messages: string[];
+  archived: boolean;
   createdAt: string;
 }
 
@@ -50,4 +51,9 @@ export const updateLeadStatus = async (id: string, status: string): Promise<Lead
 export const updateLead = async (id: string, data: Partial<Lead> & { newMessage?: string }): Promise<Lead> => {
   const response = await api.put(`/leads/admin/${id}`, data);
   return response.data.lead;
+};
+
+export const convertLeadToClient = async (id: string) => {
+  const response = await api.post(`/leads/admin/convert/${id}`);
+  return response.data;
 };
