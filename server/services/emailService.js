@@ -5,7 +5,7 @@ const resend = new Resend(env.RESEND_API_KEY);
 const FROM_EMAIL = env.FROM_EMAIL;
 
 async function sendEmail({ to, subject, html }) {
-  if (!env.RESEND_API_KEY || FROM_EMAIL) {
+  if (!env.RESEND_API_KEY || !FROM_EMAIL) {
     throw new Error("Email not configured");
   }
 

@@ -105,14 +105,18 @@ export const addFile = asyncHandler(async (req, res) => {
   const project = await Project.findById(req.params.id);
   if (!project) throw new AppError("Project not found", StatusCodes.NOT_FOUND);
 
-  const isImage = req.file.mimetype.startsWith("image/");
-  const resourceType = isImage ? "image" : "raw";
+  const ext = req.file.originalname.split(".").pop()?.toLowerCase() || "";
+  const isImageOrPdf = ["jpg", "jpeg", "png", "webp", "pdf"].includes(ext);
+  
+  const resourceType = isImageOrPdf ? "image" : "raw";
+  const uploadType = isImageOrPdf ? "upload" : "authenticated";
 
   let uploaded;
   try {
     uploaded = await cloudinary.uploader.upload(req.file.path, {
       folder: "/nxt/deliverables",
       resource_type: resourceType,
+      type: uploadType,
     });
   } catch (err) {
     throw new AppError(err.message, StatusCodes.BAD_REQUEST);
@@ -131,7 +135,6 @@ export const addFile = asyncHandler(async (req, res) => {
   res.status(StatusCodes.CREATED).json({ project });
 });
 
-// client - list own projects
 export const getClientProjects = asyncHandler(async (req, res) => {
   const projects = await Project.find({
     clientId: req.user.clientId,

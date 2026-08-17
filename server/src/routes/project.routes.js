@@ -9,6 +9,10 @@ import {
   getClientProjects,
   getClientProject,
 } from "../controllers/project.controller.js";
+import {
+  createTask,
+  getProjectTasks,
+} from "../controllers/task.controller.js";
 import { protect, restrictTo } from "../middleware/auth.js";
 import { upload } from "../middleware/multer.js";
 
@@ -46,5 +50,11 @@ projectRouter.post(
   upload.single("file"),
   addFile,
 );
+
+// Project Task routes
+projectRouter
+  .route("/:id/tasks")
+  .get(protect, getProjectTasks)
+  .post(protect, restrictTo("admin"), createTask);
 
 export default projectRouter;
