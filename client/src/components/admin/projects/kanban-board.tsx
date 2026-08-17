@@ -18,6 +18,7 @@ import { useProjectStore } from "@/store/useProjectStore";
 import { useUpdateProjectPhase } from "@/hooks/useProjects";
 
 const COLUMNS = [
+  { id: "proposed", title: "Proposed" },
   { id: "discovery", title: "Discovery" },
   { id: "design", title: "Design" },
   { id: "development", title: "Development" },

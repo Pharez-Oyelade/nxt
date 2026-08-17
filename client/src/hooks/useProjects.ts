@@ -21,6 +21,16 @@ export const useGetProjects = () => {
   });
 };
 
+export const useGetClientProjects = () => {
+  return useQuery({
+    queryKey: ["clientProjects"],
+    queryFn: async () => {
+      const { getClientProjects } = await import("../services/projects");
+      return getClientProjects();
+    }
+  });
+};
+
 export const useGetProject = (id: string) => {
   return useQuery({
     queryKey: ["projects", id],
@@ -41,6 +51,24 @@ export const useCreateProject = () => {
     },
     onError: (error: any) => {
       notify.error(error.response?.data?.message || error.message || "Failed to create project");
+    },
+  });
+};
+
+export const useProposeProject = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: { title: string; description: string }) => {
+      const { proposeProject } = await import("../services/projects");
+      return proposeProject(data);
+    },
+    onSuccess: () => {
+      notify.success("Project proposed successfully");
+      queryClient.invalidateQueries({ queryKey: ["clientProjects"] });
+    },
+    onError: (error: any) => {
+      notify.error(error.response?.data?.message || error.message || "Failed to propose project");
     },
   });
 };

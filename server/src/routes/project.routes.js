@@ -8,6 +8,7 @@ import {
   addFile,
   getClientProjects,
   getClientProject,
+  proposeProject,
 } from "../controllers/project.controller.js";
 import {
   createTask,
@@ -22,6 +23,8 @@ projectRouter
   .route("/")
   .get(protect, restrictTo("admin"), getProjects)
   .post(protect, restrictTo("admin"), createProject);
+
+projectRouter.post("/propose", protect, restrictTo("client"), proposeProject);
 
 projectRouter.get("/client", protect, restrictTo("client"), getClientProjects);
 projectRouter.get(
