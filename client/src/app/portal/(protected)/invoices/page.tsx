@@ -41,7 +41,7 @@ export default function ClientInvoicesPage() {
             {invoices.map((invoice: any) => (
               <div
                 key={invoice._id}
-                className="flex items-center justify-between p-4 rounded-xl border border-border/50 bg-muted/20 hover:border-accent/40 transition-colors"
+                className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 rounded-xl border border-border/50 bg-muted/20 hover:border-accent/40 transition-colors gap-4 sm:gap-0"
               >
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0 border border-primary/20">
@@ -57,7 +57,7 @@ export default function ClientInvoicesPage() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-6">
+                <div className="flex items-center justify-between sm:justify-end gap-6 w-full sm:w-auto">
                   <div className="text-right">
                     <span
                       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${
