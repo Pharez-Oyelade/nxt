@@ -3,10 +3,21 @@
 import React from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useGetClient, useUpdateClient } from "@/hooks/useClients";
-import { Loader2, ArrowLeft, Building2 } from "lucide-react";
+import { useCreateProject } from "@/hooks/useProjects";
+import { Loader2, ArrowLeft, Building2, Plus } from "lucide-react";
 import Link from "next/link";
 import { EditableField } from "@/components/admin/leads/editable-field"; // Reusing this from leads
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import React, { useState } from "react";
 
 const STATUS_OPTIONS = [
   { label: "Prospect", value: "prospect" },
@@ -21,12 +32,25 @@ export default function ClientDetailPage() {
   
   const { data: client, isLoading, error } = useGetClient(clientId);
   const updateMutation = useUpdateClient();
+  const createProjectMutation = useCreateProject();
   
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [projectTitle, setProjectTitle] = useState("");
+
   const handleFieldSave = async (field: string, value: string) => {
     await updateMutation.mutateAsync({
       id: clientId,
       data: { [field]: value }
     });
+  };
+
+  const handleCreateProject = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!projectTitle) return;
+    
+    await createProjectMutation.mutateAsync({ clientId, title: projectTitle });
+    setProjectTitle("");
+    setIsDialogOpen(false);
   };
 
   if (isLoading) {
@@ -65,6 +89,45 @@ export default function ClientDetailPage() {
             {client.companyName}
           </h2>
         </div>
+      </div>
+      
+      <div className="flex justify-end">
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger render={<Button className="bg-accent hover:bg-accent/90 text-white rounded-xl shadow-sm" />}>
+            <Plus className="w-4 h-4 mr-2" />
+            Create Project
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px] rounded-2xl">
+            <DialogHeader>
+              <DialogTitle>Create New Project</DialogTitle>
+              <DialogDescription>
+                Create a new project specifically for {client.companyName}.
+              </DialogDescription>
+            </DialogHeader>
+            <form onSubmit={handleCreateProject} className="space-y-4 pt-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Project Title</label>
+                <Input 
+                  value={projectTitle} 
+                  onChange={(e) => setProjectTitle(e.target.value)} 
+                  placeholder="e.g. Mobile App Development" 
+                  required
+                  className="h-10"
+                />
+              </div>
+              <div className="pt-2 flex justify-end">
+                <Button 
+                  type="submit" 
+                  disabled={createProjectMutation.isPending || !projectTitle}
+                  className="bg-accent hover:bg-accent/90 text-white"
+                >
+                  {createProjectMutation.isPending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
+                  Create Project
+                </Button>
+              </div>
+            </form>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
