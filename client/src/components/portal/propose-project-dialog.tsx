@@ -31,12 +31,19 @@ export function ProposeProjectDialog() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger render={<Button className="gap-2"><PlusCircle className="w-4 h-4" /> Propose Project</Button>} />
+      <DialogTrigger
+        render={
+          <Button className="gap-2 text-primary">
+            <PlusCircle className="w-4 h-4" /> Propose Project
+          </Button>
+        }
+      />
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Propose a New Project</DialogTitle>
           <DialogDescription>
-            Submit an idea or request for a new project. Our team will review it and get back to you.
+            Submit an idea or request for a new project. Our team will review it
+            and get back to you.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4 pt-4">
@@ -66,7 +73,9 @@ export function ProposeProjectDialog() {
           </div>
           <div className="flex justify-end pt-4">
             <Button type="submit" disabled={propose.isPending || !title.trim()}>
-              {propose.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {propose.isPending && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
               Submit Proposal
             </Button>
           </div>

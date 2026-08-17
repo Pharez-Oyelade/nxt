@@ -5,6 +5,7 @@ import { useGetInvoices } from "@/hooks/useInvoices";
 import { Button } from "@/components/ui/button";
 import { Loader2, Plus, FileText, ExternalLink } from "lucide-react";
 import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
 import { format } from "date-fns";
 
 export default function AdminInvoicesPage() {
@@ -14,15 +15,26 @@ export default function AdminInvoicesPage() {
     <div className="flex-1 p-4 md:p-8 pt-6 max-w-7xl mx-auto space-y-6 w-full pb-12">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-primary">Invoices</h2>
+          <h2 className="text-3xl font-bold tracking-tight text-primary">
+            Invoices
+          </h2>
           <p className="text-muted-foreground mt-1 text-sm">
             Manage billing, generate new invoices, and track payment statuses.
           </p>
         </div>
-        <Button nativeButton={false} render={<Link href="/admin/invoices/create" />}>
+        {/* <Button nativeButton={false} render={<Link href="/admin/invoices/create" />}>
           <Plus className="w-4 h-4 mr-2" />
           Generate Invoice
-        </Button>
+        </Button> */}
+        <Link
+          href="/admin/invoices/create"
+          className={buttonVariants({
+            className: "h-10 bg-accent hover:bg-accent/90 text-white shadow-md",
+          })}
+        >
+          <Plus className="w-4 h-4 sm:mr-2" />
+          <span className="hidden sm:inline mr-2">Generate Invoice</span>
+        </Link>
       </div>
 
       <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm">
@@ -37,9 +49,13 @@ export default function AdminInvoicesPage() {
               No Invoices Found
             </h3>
             <p className="text-sm text-muted-foreground max-w-sm mb-6">
-              You haven't generated any invoices yet. Create your first invoice to bill a client.
+              You haven't generated any invoices yet. Create your first invoice
+              to bill a client.
             </p>
-            <Button nativeButton={false} render={<Link href="/admin/invoices/create" />}>
+            <Button
+              nativeButton={false}
+              render={<Link href="/admin/invoices/create" />}
+            >
               <Plus className="w-4 h-4 mr-2" /> Generate Invoice
             </Button>
           </div>
@@ -48,7 +64,7 @@ export default function AdminInvoicesPage() {
             {invoices.map((invoice: any) => (
               <div
                 key={invoice._id}
-                className="flex items-center justify-between p-4 rounded-xl border border-border/50 bg-muted/20 hover:border-accent/40 transition-colors"
+                className="flex flex-col sm:flex-row gap-2 items-center justify-between p-4 rounded-xl border border-border/50 bg-muted/20 hover:border-accent/40 transition-colors"
               >
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0 border border-primary/20">
@@ -56,7 +72,8 @@ export default function AdminInvoicesPage() {
                   </div>
                   <div>
                     <h4 className="text-sm font-semibold text-foreground">
-                      {invoice.invoiceNumber} • ₦{invoice.totalAmount.toLocaleString()}
+                      {invoice.invoiceNumber} • ₦
+                      {invoice.totalAmount.toLocaleString()}
                     </h4>
                     <p className="text-xs text-muted-foreground mt-0.5">
                       {invoice.clientId?.companyName || "Unknown Client"} —{" "}
@@ -65,15 +82,15 @@ export default function AdminInvoicesPage() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-6">
+                <div className="flex items-center gap-20 sm:gap-6">
                   <div className="text-right">
                     <span
                       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${
                         invoice.status === "paid"
                           ? "bg-emerald-500/10 text-emerald-500 border border-emerald-500/20"
                           : invoice.status === "sent"
-                          ? "bg-blue-500/10 text-blue-500 border border-blue-500/20"
-                          : "bg-muted text-muted-foreground border border-border"
+                            ? "bg-blue-500/10 text-blue-500 border border-blue-500/20"
+                            : "bg-muted text-muted-foreground border border-border"
                       }`}
                     >
                       {invoice.status}
