@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useGetClient, useUpdateClient } from "@/hooks/useClients";
 import { useCreateProject } from "@/hooks/useProjects";
@@ -29,25 +28,25 @@ export default function ClientDetailPage() {
   const params = useParams();
   const router = useRouter();
   const clientId = params.id as string;
-  
+
   const { data: client, isLoading, error } = useGetClient(clientId);
   const updateMutation = useUpdateClient();
   const createProjectMutation = useCreateProject();
-  
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [projectTitle, setProjectTitle] = useState("");
 
   const handleFieldSave = async (field: string, value: string) => {
     await updateMutation.mutateAsync({
       id: clientId,
-      data: { [field]: value }
+      data: { [field]: value },
     });
   };
 
   const handleCreateProject = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!projectTitle) return;
-    
+
     await createProjectMutation.mutateAsync({ clientId, title: projectTitle });
     setProjectTitle("");
     setIsDialogOpen(false);
@@ -64,7 +63,9 @@ export default function ClientDetailPage() {
   if (error || !client) {
     return (
       <div className="flex-1 p-8 flex flex-col items-center justify-center min-h-[400px]">
-        <p className="text-destructive font-medium mb-4">Failed to load client details.</p>
+        <p className="text-destructive font-medium mb-4">
+          Failed to load client details.
+        </p>
         <Button onClick={() => router.push("/admin/clients")} variant="outline">
           Back to Clients
         </Button>
@@ -90,10 +91,14 @@ export default function ClientDetailPage() {
           </h2>
         </div>
       </div>
-      
+
       <div className="flex justify-end">
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger render={<Button className="bg-accent hover:bg-accent/90 text-white rounded-xl shadow-sm" />}>
+          <DialogTrigger
+            render={
+              <Button className="bg-accent hover:bg-accent/90 text-white rounded-xl shadow-sm" />
+            }
+          >
             <Plus className="w-4 h-4 mr-2" />
             Create Project
           </DialogTrigger>
@@ -107,21 +112,23 @@ export default function ClientDetailPage() {
             <form onSubmit={handleCreateProject} className="space-y-4 pt-4">
               <div className="space-y-2">
                 <label className="text-sm font-medium">Project Title</label>
-                <Input 
-                  value={projectTitle} 
-                  onChange={(e) => setProjectTitle(e.target.value)} 
-                  placeholder="e.g. Mobile App Development" 
+                <Input
+                  value={projectTitle}
+                  onChange={(e) => setProjectTitle(e.target.value)}
+                  placeholder="e.g. Mobile App Development"
                   required
                   className="h-10"
                 />
               </div>
               <div className="pt-2 flex justify-end">
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   disabled={createProjectMutation.isPending || !projectTitle}
                   className="bg-accent hover:bg-accent/90 text-white"
                 >
-                  {createProjectMutation.isPending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
+                  {createProjectMutation.isPending ? (
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  ) : null}
                   Create Project
                 </Button>
               </div>
@@ -131,14 +138,13 @@ export default function ClientDetailPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
         {/* Left Column: Details */}
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm">
             <h3 className="text-lg font-semibold mb-6 border-b border-border/40 pb-3">
               Company & Contact Information
             </h3>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-8">
               <EditableField
                 label="Company Name"
@@ -146,7 +152,7 @@ export default function ClientDetailPage() {
                 value={client.companyName}
                 onSave={handleFieldSave}
               />
-              
+
               <EditableField
                 label="Status"
                 field="status"
@@ -162,7 +168,7 @@ export default function ClientDetailPage() {
                 value={client.primaryContactName || ""}
                 onSave={handleFieldSave}
               />
-              
+
               <EditableField
                 label="Account Email"
                 field="email"
@@ -170,7 +176,7 @@ export default function ClientDetailPage() {
                 type="email"
                 onSave={handleFieldSave}
               />
-              
+
               <EditableField
                 label="Billing Email"
                 field="billingEmail"
@@ -185,14 +191,14 @@ export default function ClientDetailPage() {
                 value={client.industry || ""}
                 onSave={handleFieldSave}
               />
-              
+
               <EditableField
                 label="Project Type"
                 field="projectType"
                 value={client.projectType || ""}
                 onSave={handleFieldSave}
               />
-              
+
               <EditableField
                 label="Budget Range"
                 field="budgetRange"
@@ -209,29 +215,34 @@ export default function ClientDetailPage() {
             <h3 className="text-lg font-semibold mb-4 border-b border-border/40 pb-3">
               Quick Stats
             </h3>
-            
+
             <div className="space-y-4">
-               <div>
-                 <p className="text-sm font-medium text-muted-foreground">Joined On</p>
-                 <p className="text-base text-foreground font-medium">
-                   {new Date(client.createdAt).toLocaleDateString()}
-                 </p>
-               </div>
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Joined On
+                </p>
+                <p className="text-base text-foreground font-medium">
+                  {new Date(client.createdAt).toLocaleDateString()}
+                </p>
+              </div>
             </div>
           </div>
-          
+
           <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm">
             <h3 className="text-lg font-semibold mb-4 border-b border-border/40 pb-3 flex justify-between items-center">
               <span>Internal Notes</span>
             </h3>
-            
+
             <div className="space-y-4">
               {client.notes?.map((note, idx) => (
-                <div key={idx} className="bg-muted/30 p-3 rounded-xl border border-border/30 text-sm text-foreground">
+                <div
+                  key={idx}
+                  className="bg-muted/30 p-3 rounded-xl border border-border/30 text-sm text-foreground"
+                >
                   {note}
                 </div>
               ))}
-              
+
               {(!client.notes || client.notes.length === 0) && (
                 <p className="text-muted-foreground text-sm italic text-center py-4">
                   No notes recorded.
@@ -240,7 +251,6 @@ export default function ClientDetailPage() {
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );

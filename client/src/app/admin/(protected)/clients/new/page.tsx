@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -15,7 +14,11 @@ const formSchema = z.object({
   contactName: z.string().min(1, "Primary Contact Name is required"),
   email: z.string().email("Invalid email format"),
   industry: z.string().optional(),
-  billingEmail: z.string().email("Invalid email format").optional().or(z.literal("")),
+  billingEmail: z
+    .string()
+    .email("Invalid email format")
+    .optional()
+    .or(z.literal("")),
   notes: z.string().optional(),
 });
 
@@ -66,7 +69,8 @@ export default function NewClientPage() {
             Add New Client
           </h2>
           <p className="text-sm text-muted-foreground">
-            Create a new client manually. This will also send them an invitation email.
+            Create a new client manually. This will also send them an invitation
+            email.
           </p>
         </div>
       </div>
@@ -79,39 +83,93 @@ export default function NewClientPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label className="text-sm font-medium leading-none">Company Name <span className="text-destructive">*</span></label>
-              <Input {...register("companyName")} placeholder="Acme Corp" className="h-11" />
-              {errors.companyName && <p className="text-xs text-destructive">{errors.companyName.message}</p>}
+              <label className="text-sm font-medium leading-none">
+                Company Name <span className="text-destructive">*</span>
+              </label>
+              <Input
+                {...register("companyName")}
+                placeholder="Acme Corp"
+                className="h-11"
+              />
+              {errors.companyName && (
+                <p className="text-xs text-destructive">
+                  {errors.companyName.message}
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium leading-none">Primary Contact Name <span className="text-destructive">*</span></label>
-              <Input {...register("contactName")} placeholder="Jane Doe" className="h-11" />
-              {errors.contactName && <p className="text-xs text-destructive">{errors.contactName.message}</p>}
+              <label className="text-sm font-medium leading-none">
+                Primary Contact Name <span className="text-destructive">*</span>
+              </label>
+              <Input
+                {...register("contactName")}
+                placeholder="Jane Doe"
+                className="h-11"
+              />
+              {errors.contactName && (
+                <p className="text-xs text-destructive">
+                  {errors.contactName.message}
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium leading-none">Account Email <span className="text-destructive">*</span></label>
-              <Input {...register("email")} type="email" placeholder="jane@example.com" className="h-11" />
-              <p className="text-[11px] text-muted-foreground">This email will receive the portal invitation.</p>
-              {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
-            </div>
-            
-            <div className="space-y-2">
-              <label className="text-sm font-medium leading-none">Billing Email (Optional)</label>
-              <Input {...register("billingEmail")} type="email" placeholder="billing@example.com" className="h-11" />
-              <p className="text-[11px] text-muted-foreground">Defaults to Account Email if left empty.</p>
-              {errors.billingEmail && <p className="text-xs text-destructive">{errors.billingEmail.message}</p>}
+              <label className="text-sm font-medium leading-none">
+                Account Email <span className="text-destructive">*</span>
+              </label>
+              <Input
+                {...register("email")}
+                type="email"
+                placeholder="jane@example.com"
+                className="h-11"
+              />
+              <p className="text-[11px] text-muted-foreground">
+                This email will receive the portal invitation.
+              </p>
+              {errors.email && (
+                <p className="text-xs text-destructive">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium leading-none">Industry (Optional)</label>
-              <Input {...register("industry")} placeholder="e.g. Technology, Retail" className="h-11" />
+              <label className="text-sm font-medium leading-none">
+                Billing Email (Optional)
+              </label>
+              <Input
+                {...register("billingEmail")}
+                type="email"
+                placeholder="billing@example.com"
+                className="h-11"
+              />
+              <p className="text-[11px] text-muted-foreground">
+                Defaults to Account Email if left empty.
+              </p>
+              {errors.billingEmail && (
+                <p className="text-xs text-destructive">
+                  {errors.billingEmail.message}
+                </p>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium leading-none">
+                Industry (Optional)
+              </label>
+              <Input
+                {...register("industry")}
+                placeholder="e.g. Technology, Retail"
+                className="h-11"
+              />
             </div>
           </div>
 
           <div className="space-y-2 pt-4">
-            <label className="text-sm font-medium leading-none">Internal Notes (Optional)</label>
+            <label className="text-sm font-medium leading-none">
+              Internal Notes (Optional)
+            </label>
             <textarea
               {...register("notes")}
               placeholder="Enter any initial notes about this client..."
