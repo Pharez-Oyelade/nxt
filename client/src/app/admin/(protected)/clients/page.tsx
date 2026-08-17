@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { useGetClients } from "@/hooks/useClients";
 import { Loader2, Plus, Building2, Mail, User } from "lucide-react";
 import Link from "next/link";
