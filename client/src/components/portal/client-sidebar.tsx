@@ -139,8 +139,8 @@ export function ClientSidebar() {
                         <item.icon />
                         <span>{item.title}</span>
                       </SidebarMenuButton>
-                      {item.badge && (
-                        <SidebarMenuBadge className="bg-primary/10 text-primary">{item.badge}</SidebarMenuBadge>
+                      {(item as any).badge && (
+                        <SidebarMenuBadge className="bg-primary/10 text-primary">{(item as any).badge}</SidebarMenuBadge>
                       )}
                     </SidebarMenuItem>
                   );
