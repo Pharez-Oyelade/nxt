@@ -23,6 +23,22 @@ export interface Project {
   updatedAt: string;
 }
 
+export interface Task {
+  _id: string;
+  projectId: string;
+  title: string;
+  description?: string;
+  dueDate?: string;
+  status: "pending" | "in progress" | "completed";
+  assignedTo?: {
+    _id: string;
+    name: string;
+    email: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+}
+
 export const getProjects = async (): Promise<Project[]> => {
   const response = await api.get("/projects");
   return response.data.projects;
@@ -58,4 +74,35 @@ export const uploadDeliverable = async (id: string, file: File): Promise<Project
     },
   });
   return response.data.project;
+};
+
+// Task APIs
+export const getAllTasks = async (): Promise<Task[]> => {
+  const response = await api.get("/tasks");
+  return response.data.tasks;
+};
+
+export const getProjectTasks = async (projectId: string): Promise<Task[]> => {
+  const response = await api.get(`/projects/${projectId}/tasks`);
+  return response.data.tasks;
+};
+
+export const createTask = async (
+  projectId: string,
+  data: { title: string; description?: string; dueDate?: string; assignedTo?: string; status?: string }
+): Promise<Task> => {
+  const response = await api.post(`/projects/${projectId}/tasks`, data);
+  return response.data.task;
+};
+
+export const updateTask = async (
+  taskId: string,
+  data: Partial<{ title: string; description: string; dueDate: string; assignedTo: string; status: string }>
+): Promise<Task> => {
+  const response = await api.put(`/tasks/${taskId}`, data);
+  return response.data.task;
+};
+
+export const deleteTask = async (taskId: string): Promise<void> => {
+  await api.delete(`/tasks/${taskId}`);
 };
