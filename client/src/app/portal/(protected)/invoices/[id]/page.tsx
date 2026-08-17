@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useGetInvoice } from "@/hooks/useInvoices";
+import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Loader2, ArrowLeft, CreditCard, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
@@ -20,6 +21,7 @@ export default function ClientInvoiceDetailPage() {
   const params = useParams();
   const router = useRouter();
   const invoiceId = params.id as string;
+  const queryClient = useQueryClient();
 
   const { data: invoice, isLoading, error, refetch } = useGetInvoice(invoiceId);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -78,9 +80,11 @@ export default function ClientInvoiceDetailPage() {
       onSuccess: (transaction: any) => {
         setIsProcessing(false);
         toast.success("Payment successful! Processing receipt...");
-        // In a real app, you might optimistically update or poll for the webhook to finish
-        // We'll refetch the invoice to see if the webhook has marked it paid
-        setTimeout(() => refetch(), 3000);
+        // Refetch the detail and invalidate the client list cache
+        setTimeout(() => {
+          refetch();
+          queryClient.invalidateQueries({ queryKey: ["invoices", "client"] });
+        }, 3000);
       },
       onCancel: () => {
         setIsProcessing(false);
@@ -90,10 +94,10 @@ export default function ClientInvoiceDetailPage() {
   };
 
   return (
-    <div className="flex-1 p-4 md:p-8 pt-6 max-w-4xl mx-auto space-y-6 w-full pb-12">
+    <div className="flex-1 p-3 sm:p-6 md:p-8 pt-6 max-w-6xl mx-auto space-y-6 w-full pb-12">
       <Script src="https://js.paystack.co/v2/inline.js" strategy="lazyOnload" />
 
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <Button
             variant="ghost"
@@ -142,7 +146,7 @@ export default function ClientInvoiceDetailPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2 space-y-6">
           <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm space-y-6">
-            <div className="flex justify-between items-start border-b border-border/40 pb-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start gap-4 sm:gap-0 border-b border-border/40 pb-6">
               <div>
                 <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-1">
                   Billed To
@@ -150,7 +154,7 @@ export default function ClientInvoiceDetailPage() {
                 <p className="text-lg font-medium">{invoice.clientId?.companyName}</p>
                 <p className="text-sm text-muted-foreground">{invoice.clientId?.email}</p>
               </div>
-              <div className="text-right">
+              <div className="sm:text-right">
                 <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-1">
                   Project
                 </h3>
