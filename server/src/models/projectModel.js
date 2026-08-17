@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const projectSchema = new mongoose.Schema({
   clientId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Client",
+    ref: "client",
     required: true,
   },
   title: {
@@ -45,6 +45,10 @@ const projectSchema = new mongoose.Schema({
       name: {
         type: String,
         required: true,
+      },
+      uploadedAt: {
+        type: Date,
+        default: Date.now,
       },
     },
   ],

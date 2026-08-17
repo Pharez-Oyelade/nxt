@@ -10,7 +10,7 @@ import {
   getClientProject,
 } from "../controllers/project.controller.js";
 import { protect, restrictTo } from "../middleware/auth.js";
-import upload from "../middleware/multer.js";
+import { upload } from "../middleware/multer.js";
 
 const projectRouter = express.Router();
 
@@ -20,21 +20,31 @@ projectRouter
   .post(protect, restrictTo("admin"), createProject);
 
 projectRouter.get("/client", protect, restrictTo("client"), getClientProjects);
-projectRouter.get("/client/:id", protect, restrictTo("client"), getClientProject);
+projectRouter.get(
+  "/client/:id",
+  protect,
+  restrictTo("client"),
+  getClientProject,
+);
 
 projectRouter
   .route("/:id")
   .get(protect, restrictTo("admin"), getProject)
   .put(protect, restrictTo("admin"), updateProject);
 
-projectRouter.put("/:id/phase", protect, restrictTo("admin"), updateProjectPhase);
+projectRouter.put(
+  "/:id/phase",
+  protect,
+  restrictTo("admin"),
+  updateProjectPhase,
+);
 
 projectRouter.post(
   "/:id/files",
   protect,
   restrictTo("admin"),
   upload.single("file"),
-  addFile
+  addFile,
 );
 
 export default projectRouter;

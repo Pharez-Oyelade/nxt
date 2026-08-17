@@ -17,7 +17,7 @@ const PHASES = [
 
 // admin - list all projects
 export const getProjects = asyncHandler(async (req, res) => {
-  const projects = await Project.find({ archived: false })
+  const projects = await Project.find({ phase: { $ne: "archived" } })
     .populate("clientId", "companyName")
     .sort({
       createdAt: -1,
@@ -30,8 +30,7 @@ export const getProjects = asyncHandler(async (req, res) => {
 export const getProject = asyncHandler(async (req, res) => {
   const project = await Project.findById(req.params.id).populate(
     "clientId",
-    "companyName",
-    "primaryContactName",
+    "companyName primaryContactName"
   );
 
   if (!project) {
@@ -106,10 +105,14 @@ export const addFile = asyncHandler(async (req, res) => {
   const project = await Project.findById(req.params.id);
   if (!project) throw new AppError("Project not found", StatusCodes.NOT_FOUND);
 
+  const isImage = req.file.mimetype.startsWith("image/");
+  const resourceType = isImage ? "image" : "raw";
+
   let uploaded;
   try {
     uploaded = await cloudinary.uploader.upload(req.file.path, {
       folder: "/nxt/deliverables",
+      resource_type: resourceType,
     });
   } catch (err) {
     throw new AppError(err.message, StatusCodes.BAD_REQUEST);
