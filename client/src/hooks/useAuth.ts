@@ -10,6 +10,11 @@ interface LoginCredentials {
   [key: string]: any;
 }
 
+interface AcceptInviteData {
+  token: string;
+  password?: string;
+}
+
 export function useAuth() {
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -58,11 +63,29 @@ export function useAuth() {
     },
   });
 
+  const acceptInviteMutation = useMutation({
+    mutationFn: async (data: AcceptInviteData) => {
+      const response = await api.post(`/auth/invite/${data.token}`, { password: data.password });
+      return response.data;
+    },
+    onSuccess: (data) => {
+      setAuth(data.user);
+      queryClient.setQueryData(["auth", "me"], { user: data.user });
+      notify.success(data.message || "Account setup successful");
+      router.push("/portal");
+    },
+    onError: (error: any) => {
+      notify.error(error.response?.data?.message || error.message || "Failed to setup account");
+    },
+  });
+
   return {
     login: loginMutation.mutateAsync,
     isLoggingIn: loginMutation.isPending,
     logout: logoutMutation.mutateAsync,
     isLoggingOut: logoutMutation.isPending,
+    acceptInvite: acceptInviteMutation.mutateAsync,
+    isAcceptingInvite: acceptInviteMutation.isPending,
   };
 }
 
