@@ -164,8 +164,8 @@ export const proposeProject = asyncHandler(async (req, res) => {
 
 // client detail view
 export const getClientProject = asyncHandler(async (req, res) => {
-  const project = await Project.find({
-    id: req.params.id,
+  const project = await Project.findOne({
+    _id: req.params.id,
     clientId: req.user.clientId,
   });
 

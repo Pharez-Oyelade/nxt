@@ -18,6 +18,8 @@ import leadRouter from "./routes/lead.routes.js";
 import clientRouter from "./routes/client.routes.js";
 import projectRouter from "./routes/project.routes.js";
 import taskRouter from "./routes/task.routes.js";
+import invoiceRouter from "./routes/invoice.routes.js";
+import { handlePaystackWebhook } from "./controllers/invoice.controller.js";
 
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
@@ -27,6 +29,10 @@ const app = express();
 app.use(helmet());
 app.use(cors({ origin: env.CLIENT_URL, credentials: true }));
 app.use(morgan(env.NODE_ENV === "development" ? "dev" : "combined"));
+
+// Webhook route must use raw body before express.json() parses it
+app.post("/api/v1/invoices/webhook", express.raw({ type: "application/json" }), handlePaystackWebhook);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -40,6 +46,7 @@ app.use("/api/v1/leads", leadRouter);
 app.use("/api/v1/clients", clientRouter);
 app.use("/api/v1/projects", projectRouter);
 app.use("/api/v1/tasks", taskRouter);
+app.use("/api/v1/invoices", invoiceRouter);
 
 // error handler
 app.use(errorHandler);

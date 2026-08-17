@@ -1,62 +1,31 @@
 "use client";
 
-import React, { useRef } from "react";
+import React from "react";
 import { useParams, useRouter } from "next/navigation";
-import {
-  useGetProject,
-  useUpdateProject,
-  useUploadDeliverable,
-} from "@/hooks/useProjects";
+import { useGetClientProject } from "@/hooks/useProjects";
 import { Button } from "@/components/ui/button";
 import {
   Loader2,
   ArrowLeft,
-  Building2,
-  UploadCloud,
   FileIcon,
   ExternalLink,
   Download,
+  MessageSquare,
+  UploadCloud,
 } from "lucide-react";
 import Link from "next/link";
-import { EditableField } from "@/components/admin/leads/editable-field"; // Reusing this from leads
 import { format } from "date-fns";
-import { ProjectTasks } from "@/components/admin/projects/project-tasks";
 
-export default function ProjectDetailPage() {
+export default function ClientProjectDetailPage() {
   const params = useParams();
   const router = useRouter();
   const projectId = params.id as string;
 
-  const { data: project, isLoading, error } = useGetProject(projectId);
-  const updateMutation = useUpdateProject();
-  const uploadMutation = useUploadDeliverable();
-
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleFieldSave = async (field: string, value: string) => {
-    await updateMutation.mutateAsync({
-      id: projectId,
-      data: { [field]: value },
-    });
-  };
-
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    try {
-      await uploadMutation.mutateAsync({ id: projectId, file });
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ""; // Reset input
-      }
-    } catch (err) {
-      // Error handled by hook
-    }
-  };
+  const { data: project, isLoading, error } = useGetClientProject(projectId);
 
   if (isLoading) {
     return (
-      <div className="flex-1 p-8 flex justify-center items-center h-full text-muted-foreground">
+      <div className="flex-1 p-8 flex justify-center items-center h-[50vh] text-muted-foreground">
         <Loader2 className="w-8 h-8 animate-spin" />
       </div>
     );
@@ -69,7 +38,7 @@ export default function ProjectDetailPage() {
           Failed to load project details.
         </p>
         <Button
-          onClick={() => router.push("/admin/projects")}
+          onClick={() => router.push("/portal/projects")}
           variant="outline"
         >
           Back to Projects
@@ -82,25 +51,23 @@ export default function ProjectDetailPage() {
     <div className="flex-1 p-4 md:p-8 pt-6 max-w-5xl mx-auto space-y-6 w-full pb-12">
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <Link
-            href="/admin/projects"
-            className="inline-flex items-center justify-center h-10 w-10 rounded-full hover:bg-muted transition-colors text-muted-foreground"
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full text-muted-foreground hover:bg-muted"
+            nativeButton={false}
+            render={<Link href="/portal/projects" />}
           >
             <ArrowLeft className="w-5 h-5" />
-          </Link>
+          </Button>
           <div className="flex items-center gap-3">
             <h2 className="text-3xl font-bold tracking-tight text-primary">
-              Project Details
+              {project.title}
             </h2>
             <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium capitalize bg-accent/10 text-accent border border-accent/20">
               {project.phase}
             </span>
           </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button nativeButton={false} render={<Link href={`/admin/invoices/create?projectId=${projectId}`} />} variant="outline">
-            Generate Invoice
-          </Button>
         </div>
       </div>
 
@@ -108,24 +75,13 @@ export default function ProjectDetailPage() {
         {/* Left Column: Details & Deliverables */}
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm">
-            <h3 className="text-lg font-semibold mb-6 border-b border-border/40 pb-3">
+            <h3 className="text-lg font-semibold mb-4 border-b border-border/40 pb-3">
               Overview
             </h3>
-
-            <div className="space-y-8">
-              <EditableField
-                label="Project Title"
-                field="title"
-                value={project.title}
-                onSave={handleFieldSave}
-              />
-
-              <EditableField
-                label="Description"
-                field="description"
-                value={project.description || ""}
-                onSave={handleFieldSave}
-              />
+            <div className="space-y-2">
+              <p className="text-sm text-muted-foreground whitespace-pre-wrap">
+                {project.description || "No description provided."}
+              </p>
             </div>
           </div>
 
@@ -133,30 +89,6 @@ export default function ProjectDetailPage() {
           <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm">
             <div className="flex items-center justify-between border-b border-border/40 pb-3 mb-6">
               <h3 className="text-lg font-semibold">Deliverables & Files</h3>
-
-              <div>
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  className="hidden"
-                  accept=".jpg,.jpeg,.png,.webp,.pdf,.doc,.docx,.zip"
-                  onChange={handleFileUpload}
-                />
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="h-8 shadow-sm"
-                  disabled={uploadMutation.isPending}
-                  onClick={() => fileInputRef.current?.click()}
-                >
-                  {uploadMutation.isPending ? (
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  ) : (
-                    <UploadCloud className="w-4 h-4 mr-2" />
-                  )}
-                  Upload File
-                </Button>
-              </div>
             </div>
 
             <div className="space-y-3">
@@ -186,25 +118,30 @@ export default function ProjectDetailPage() {
                     </div>
 
                     <div className="flex items-center gap-1 shrink-0">
-                      <a
-                        href={file.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2 text-muted-foreground hover:text-accent transition-colors"
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-muted-foreground hover:text-accent transition-colors"
                         title="View File"
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                      </a>
-                      <a
-                        href={file.url}
-                        download={file.name}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2 text-muted-foreground hover:text-accent transition-colors"
+                        nativeButton={false}
+                        render={
+                          <a href={file.url} target="_blank" rel="noopener noreferrer">
+                            <ExternalLink className="w-4 h-4" />
+                          </a>
+                        }
+                      />
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-muted-foreground hover:text-accent transition-colors"
                         title="Download File"
-                      >
-                        <Download className="w-4 h-4" />
-                      </a>
+                        nativeButton={false}
+                        render={
+                          <a href={file.url} download={file.name} target="_blank" rel="noopener noreferrer">
+                            <Download className="w-4 h-4" />
+                          </a>
+                        }
+                      />
                     </div>
                   </div>
                 ))
@@ -212,47 +149,36 @@ export default function ProjectDetailPage() {
                 <div className="flex flex-col items-center justify-center py-8 text-center border-2 border-dashed border-border/50 rounded-xl bg-muted/10">
                   <UploadCloud className="w-8 h-8 text-muted-foreground/50 mb-2" />
                   <p className="text-sm font-medium text-muted-foreground">
-                    No deliverables uploaded yet
+                    No deliverables available
                   </p>
                   <p className="text-xs text-muted-foreground mt-1">
-                    Upload project files, PDFs, or images here.
+                    Files uploaded by the admin team will appear here.
                   </p>
                 </div>
               )}
             </div>
           </div>
-          
-          {/* Tasks Section */}
-          <ProjectTasks projectId={projectId} />
-        </div>
 
-        {/* Right Column: Client Context */}
-        <div className="lg:col-span-1 space-y-6">
+          {/* Project Notes/Comments Placeholder */}
           <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm">
-            <h3 className="text-lg font-semibold mb-4 border-b border-border/40 pb-3">
-              Client Details
-            </h3>
-
-            <div className="space-y-4">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center text-primary shrink-0">
-                  <Building2 className="w-5 h-5" />
-                </div>
-                <div>
-                  <Link
-                    href={`/admin/clients/${project.clientId._id}`}
-                    className="font-semibold text-primary hover:underline block"
-                  >
-                    {project.clientId.companyName}
-                  </Link>
-                  <span className="text-xs text-muted-foreground">
-                    {project.clientId.primaryContactName || "No contact name"}
-                  </span>
-                </div>
-              </div>
+            <div className="flex items-center justify-between border-b border-border/40 pb-3 mb-6">
+              <h3 className="text-lg font-semibold">Project Notes</h3>
+              <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full font-medium">Coming Soon</span>
+            </div>
+            <div className="flex flex-col items-center justify-center py-8 text-center border-2 border-dashed border-border/50 rounded-xl bg-muted/10">
+              <MessageSquare className="w-8 h-8 text-muted-foreground/50 mb-2" />
+              <p className="text-sm font-medium text-muted-foreground">
+                Discussions & Comments
+              </p>
+              <p className="text-xs text-muted-foreground mt-1 max-w-xs">
+                Soon you will be able to leave notes, feedback, and communicate directly with the team about this project.
+              </p>
             </div>
           </div>
+        </div>
 
+        {/* Right Column: Timeline & Context */}
+        <div className="lg:col-span-1 space-y-6">
           <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm">
             <h3 className="text-lg font-semibold mb-4 border-b border-border/40 pb-3">
               Project Timeline

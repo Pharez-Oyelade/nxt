@@ -23,6 +23,7 @@ const required = [
   "CLOUDINARY_CLOUD_NAME",
   "CLOUDINARY_API_KEY",
   "CLOUDINARY_API_SECRET",
+  "PAYSTACK_SECRET_KEY",
 ];
 
 for (const key of required) {

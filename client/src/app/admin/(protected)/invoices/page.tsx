@@ -1,24 +1,28 @@
 "use client";
 
 import React from "react";
-import { useGetClientInvoices } from "@/hooks/useInvoices";
+import { useGetInvoices } from "@/hooks/useInvoices";
 import { Button } from "@/components/ui/button";
-import { Loader2, FileText, ArrowRight } from "lucide-react";
+import { Loader2, Plus, FileText, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { format } from "date-fns";
 
-export default function ClientInvoicesPage() {
-  const { data: invoices, isLoading } = useGetClientInvoices();
+export default function AdminInvoicesPage() {
+  const { data: invoices, isLoading } = useGetInvoices();
 
   return (
     <div className="flex-1 p-4 md:p-8 pt-6 max-w-7xl mx-auto space-y-6 w-full pb-12">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-primary">Billing & Invoices</h2>
+          <h2 className="text-3xl font-bold tracking-tight text-primary">Invoices</h2>
           <p className="text-muted-foreground mt-1 text-sm">
-            View your payment history and pay outstanding invoices securely.
+            Manage billing, generate new invoices, and track payment statuses.
           </p>
         </div>
+        <Button nativeButton={false} render={<Link href="/admin/invoices/create" />}>
+          <Plus className="w-4 h-4 mr-2" />
+          Generate Invoice
+        </Button>
       </div>
 
       <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm">
@@ -30,11 +34,14 @@ export default function ClientInvoicesPage() {
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <FileText className="w-12 h-12 text-muted-foreground/30 mb-4" />
             <h3 className="text-lg font-medium text-foreground mb-1">
-              No Invoices Yet
+              No Invoices Found
             </h3>
-            <p className="text-sm text-muted-foreground max-w-sm">
-              You do not have any invoices at this time. Once an invoice is generated for your project, it will appear here.
+            <p className="text-sm text-muted-foreground max-w-sm mb-6">
+              You haven't generated any invoices yet. Create your first invoice to bill a client.
             </p>
+            <Button nativeButton={false} render={<Link href="/admin/invoices/create" />}>
+              <Plus className="w-4 h-4 mr-2" /> Generate Invoice
+            </Button>
           </div>
         ) : (
           <div className="space-y-4">
@@ -52,7 +59,8 @@ export default function ClientInvoicesPage() {
                       {invoice.invoiceNumber} • ₦{invoice.totalAmount.toLocaleString()}
                     </h4>
                     <p className="text-xs text-muted-foreground mt-0.5">
-                      {invoice.projectId?.title || "Project Invoice"}
+                      {invoice.clientId?.companyName || "Unknown Client"} —{" "}
+                      {invoice.projectId?.title || "Unknown Project"}
                     </p>
                   </div>
                 </div>
@@ -68,22 +76,21 @@ export default function ClientInvoicesPage() {
                           : "bg-muted text-muted-foreground border border-border"
                       }`}
                     >
-                      {invoice.status === "sent" ? "Unpaid" : invoice.status}
+                      {invoice.status}
                     </span>
                     <p className="text-xs text-muted-foreground mt-1">
-                      {invoice.dueDate
-                        ? `Due: ${format(new Date(invoice.dueDate), "MMM d, yyyy")}`
-                        : format(new Date(invoice.createdAt), "MMM d, yyyy")}
+                      {format(new Date(invoice.createdAt), "MMM d, yyyy")}
                     </p>
                   </div>
 
                   <Button
-                    variant="outline"
-                    className="shrink-0"
+                    variant="ghost"
+                    size="icon"
+                    className="text-muted-foreground hover:text-accent shrink-0"
                     nativeButton={false}
-                    render={<Link href={`/portal/invoices/${invoice._id}`} />}
+                    render={<Link href={`/admin/invoices/${invoice._id}`} />}
                   >
-                    View <ArrowRight className="w-4 h-4 ml-2" />
+                    <ExternalLink className="w-4 h-4" />
                   </Button>
                 </div>
               </div>

@@ -1,14 +1,19 @@
 import mongoose from "mongoose";
 
 const invoiceSchema = new mongoose.Schema({
+  invoiceNumber: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   clientId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Client",
+    ref: "client",
     required: true,
   },
   projectId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Project",
+    ref: "project",
     required: true,
   },
   lineItems: [

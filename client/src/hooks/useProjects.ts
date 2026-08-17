@@ -31,6 +31,17 @@ export const useGetClientProjects = () => {
   });
 };
 
+export const useGetClientProject = (id: string) => {
+  return useQuery({
+    queryKey: ["clientProjects", id],
+    queryFn: async () => {
+      const { getClientProject } = await import("../services/projects");
+      return getClientProject(id);
+    },
+    enabled: !!id,
+  });
+};
+
 export const useGetProject = (id: string) => {
   return useQuery({
     queryKey: ["projects", id],
