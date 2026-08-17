@@ -97,6 +97,11 @@ export default function ProjectDetailPage() {
             </span>
           </div>
         </div>
+        <div className="flex items-center gap-2">
+          <Button nativeButton={false} render={<Link href={`/admin/invoices/create?projectId=${projectId}`} />} variant="outline">
+            Generate Invoice
+          </Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
