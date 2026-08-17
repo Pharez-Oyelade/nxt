@@ -6,6 +6,7 @@ import { AppError } from "../middleware/errorHandler.js";
 import { StatusCodes } from "http-status-codes";
 
 const PHASES = [
+  "proposed",
   "discovery",
   "design",
   "development",
@@ -141,6 +142,24 @@ export const getClientProjects = asyncHandler(async (req, res) => {
   });
 
   res.json({ projects });
+});
+
+// client propose a project
+export const proposeProject = asyncHandler(async (req, res) => {
+  const { title, description } = req.body;
+
+  if (!title) {
+    throw new AppError("Please provide a project title", StatusCodes.BAD_REQUEST);
+  }
+
+  const project = await Project.create({
+    clientId: req.user.clientId,
+    title,
+    description,
+    phase: "proposed",
+  });
+
+  res.status(StatusCodes.CREATED).json({ project });
 });
 
 // client detail view

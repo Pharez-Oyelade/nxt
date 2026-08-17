@@ -156,7 +156,7 @@ export default function ProjectDetailPage() {
 
             <div className="space-y-3">
               {project.files && project.files.length > 0 ? (
-                project.files.map((file) => (
+                project.files.map((file: any) => (
                   <div
                     key={file._id}
                     className="flex items-center justify-between p-3 rounded-xl border border-border/50 bg-muted/30 group hover:border-accent/40 transition-colors"

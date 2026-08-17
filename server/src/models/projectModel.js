@@ -13,6 +13,7 @@ const projectSchema = new mongoose.Schema({
   phase: {
     type: String,
     enum: [
+      "proposed",
       "discovery",
       "design",
       "development",

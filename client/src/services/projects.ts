@@ -44,8 +44,18 @@ export const getProjects = async (): Promise<Project[]> => {
   return response.data.projects;
 };
 
-export const getProject = async (id: string): Promise<Project> => {
+export const getProject = async (id: string) => {
   const response = await api.get(`/projects/${id}`);
+  return response.data.project;
+};
+
+export const getClientProjects = async () => {
+  const response = await api.get("/projects/client");
+  return response.data.projects;
+};
+
+export const proposeProject = async (data: { title: string; description: string }) => {
+  const response = await api.post("/projects/propose", data);
   return response.data.project;
 };
 
