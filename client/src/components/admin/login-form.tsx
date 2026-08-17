@@ -32,7 +32,7 @@ export function AdminLoginForm() {
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      await login(data);
+      await login({ ...data, expectedRole: "admin" });
     } catch (error) {
       // The hook handles toast notifications for errors
     }
