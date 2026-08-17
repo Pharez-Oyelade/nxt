@@ -16,6 +16,8 @@ import casestudyRouter from "./routes/casestudy.routes.js";
 import blogRouter from "./routes/blog.routes.js";
 import leadRouter from "./routes/lead.routes.js";
 import clientRouter from "./routes/client.routes.js";
+import projectRouter from "./routes/project.routes.js";
+import taskRouter from "./routes/task.routes.js";
 
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
@@ -36,6 +38,8 @@ app.use("/api/v1/casestudies", casestudyRouter);
 app.use("/api/v1/blogs", blogRouter);
 app.use("/api/v1/leads", leadRouter);
 app.use("/api/v1/clients", clientRouter);
+app.use("/api/v1/projects", projectRouter);
+app.use("/api/v1/tasks", taskRouter);
 
 // error handler
 app.use(errorHandler);

@@ -1,11 +1,12 @@
 import { Router } from "express";
 import { protect, restrictTo } from "../middleware/auth.js";
-import { login, logout, me } from "../controllers/auth.controller.js";
+import { login, logout, me, getAdmins } from "../controllers/auth.controller.js";
 
 const authRouter = Router();
 
 authRouter.post("/login", login);
 authRouter.get("/me", protect, me);
 authRouter.post("/logout", protect, logout);
+authRouter.get("/admins", protect, restrictTo("admin"), getAdmins);
 
 export default authRouter;

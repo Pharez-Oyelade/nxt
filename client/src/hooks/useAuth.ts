@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import api from "@/lib/axios";
 import { notify } from "@/lib/toast";
@@ -64,4 +64,14 @@ export function useAuth() {
     logout: logoutMutation.mutateAsync,
     isLoggingOut: logoutMutation.isPending,
   };
+}
+
+export function useGetAdmins() {
+  return useQuery({
+    queryKey: ["admins"],
+    queryFn: async () => {
+      const response = await api.get("/auth/admins");
+      return response.data.admins;
+    },
+  });
 }

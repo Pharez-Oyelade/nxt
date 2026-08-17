@@ -72,3 +72,9 @@ export const me = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user.userId).select("-password");
   res.json({ user });
 });
+
+// get all admin users for task assignment etc
+export const getAdmins = asyncHandler(async (req, res, next) => {
+  const admins = await User.find({ role: "admin" }).select("name email");
+  res.json({ admins });
+});

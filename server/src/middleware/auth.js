@@ -21,3 +21,8 @@ export const restrictTo =
     }
     next();
   };
+
+// scope client id
+// export const scopeClientId = asyncHandler(async (req, res, next) => {
+
+// })

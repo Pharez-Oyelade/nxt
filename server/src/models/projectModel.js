@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const projectSchema = new mongoose.Schema({
   clientId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Client",
+    ref: "client",
     required: true,
   },
   title: {
@@ -16,7 +16,6 @@ const projectSchema = new mongoose.Schema({
       "discovery",
       "design",
       "development",
-      "testing",
       "review",
       "delivered",
       "maintenance",
@@ -30,12 +29,27 @@ const projectSchema = new mongoose.Schema({
   tasks: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Task",
+      ref: "task",
     },
   ],
   files: [
     {
-      type: String,
+      url: {
+        type: String,
+        required: true,
+      },
+      public_id: {
+        type: String,
+        required: true,
+      },
+      name: {
+        type: String,
+        required: true,
+      },
+      uploadedAt: {
+        type: Date,
+        default: Date.now,
+      },
     },
   ],
   createdAt: {
