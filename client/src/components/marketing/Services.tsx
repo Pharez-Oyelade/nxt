@@ -2,33 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 
-const servicesData = [
-  {
-    name: "Strategy",
-    description: "We figure out what you're building and why it should exist",
-    href: "/",
-    image: "/images/services/strategy_bg_1786802101253.jpg",
-  },
-  {
-    name: "Identity",
-    description: "We give you a clear identity that sets your brand apart",
-    href: "/",
-    image: "/images/services/identity_bg_1786802112521.jpg",
-  },
-  {
-    name: "Design",
-    description:
-      "We turn ideas into clear, useful experiences that look as good as they work",
-    href: "/",
-    image: "/images/services/design_bg_1786802123606.jpg",
-  },
-  {
-    name: "Engineering",
-    description: "We build the products that bring everything to life.",
-    href: "/",
-    image: "/images/services/engineering_bg_1786802134054.jpg",
-  },
-];
+import { servicesData } from "@/data/services";
 
 export default function Services() {
   return (
@@ -50,19 +24,19 @@ export default function Services() {
           <div key={index}>
             <div className="h-[200px] md:h-[300px] w-full relative overflow-hidden group px-8 md:px-30">
               <Image
-                src={service.image}
+                src={service.heroImage}
                 fill
                 alt={service.name}
                 priority={false}
                 loading="lazy"
                 className="object-cover"
               />
-              <Link href={service.href}>
+              <Link href={`/services/${service.slug}`}>
                 <div className="bg-background/75 dark:bg-background/50 absolute h-full w-full top-0 inset-0 z-0" />
                 <div className="hidden md:block bg-background absolute h-full w-full top-0 inset-0 z-10 md:group-hover:-translate-y-full transition-transform duration-500 ease-in-out will-change-transform transform-translate-y-0" />
                 <div className="flex flex-col md:flex-row justify-between md:px-10 items-center z-50 relative h-full py-8 md:py-6">
                   <div className="font-semibold w-full md:w-[35%] text-md md:text-xl">
-                    {service.description}
+                    {service.subtitle}
                   </div>
 
                   <div className="flex items-center text-6xl md:text-8xl relative text-center md:text-left">
