@@ -49,17 +49,22 @@ export function useAuth() {
     onSuccess: () => {
       clearAuth();
       queryClient.clear();
-      notify.success("Logged out successfully");
+      // Also explicitly remove persisted auth from localStorage
+      localStorage.removeItem("auth-storage");
+      sessionStorage.clear();
       
+      // window.location.replace prevents back navigation to this page
       const isClientPortal = window.location.pathname.startsWith("/portal");
-      if (isClientPortal) {
-        router.push("/portal/login");
-      } else {
-        router.push("/admin/login");
-      }
+      window.location.replace(isClientPortal ? "/portal/login" : "/admin/login");
     },
-    onError: (error: any) => {
-      notify.error(error.message || "Failed to logout");
+    onError: () => {
+      // Even if the server call fails, nuke all local state and redirect
+      clearAuth();
+      queryClient.clear();
+      localStorage.removeItem("auth-storage");
+      sessionStorage.clear();
+      const isClientPortal = window.location.pathname.startsWith("/portal");
+      window.location.replace(isClientPortal ? "/portal/login" : "/admin/login");
     },
   });
 

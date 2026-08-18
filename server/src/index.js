@@ -25,11 +25,20 @@ import { handlePaystackWebhook } from "./controllers/invoice.controller.js";
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 const app = express();
+app.disable("etag"); // Prevent 304 responses — API data must never be served from browser cache
 
 // middlewares
 app.use(helmet());
 app.use(cors({ origin: env.CLIENT_URL, credentials: true }));
 app.use(morgan(env.NODE_ENV === "development" ? "dev" : "combined"));
+
+// Prevent browsers from HTTP-caching API responses (security: no stale auth data)
+app.use((req, res, next) => {
+  res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
+  res.set("Pragma", "no-cache");
+  res.set("Expires", "0");
+  next();
+});
 
 // Webhook route must use raw body before express.json() parses it
 app.post("/api/v1/invoices/webhook", express.raw({ type: "application/json" }), handlePaystackWebhook);

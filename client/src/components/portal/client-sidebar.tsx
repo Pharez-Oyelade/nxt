@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { useAuth } from "@/hooks/useAuth";
 import {
   LayoutDashboard,
   Briefcase,
@@ -94,9 +95,10 @@ export function ClientSidebar() {
   const { user, clearAuth } = useAuthStore();
   const { setOpenMobile, isMobile } = useSidebar();
 
+  const { logout } = useAuth();
+
   const handleLogout = () => {
-    clearAuth();
-    window.location.href = "/portal/login";
+    logout();
   };
 
   const getInitials = (name?: string) => {

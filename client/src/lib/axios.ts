@@ -39,7 +39,7 @@ api.interceptors.response.use(
       const loginPath = window.location.pathname.startsWith("/portal")
         ? LOGIN_PATHS.client
         : LOGIN_PATHS.admin;
-      window.location.href = loginPath;
+      window.location.replace(loginPath);
     }
 
     return Promise.reject(new Error(message));

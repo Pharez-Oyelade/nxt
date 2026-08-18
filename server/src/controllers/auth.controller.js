@@ -7,6 +7,14 @@ import { env } from "../config/env.js";
 import { AppError } from "../middleware/errorHandler.js";
 import { StatusCodes } from "http-status-codes";
 
+// Shared cookie options — login, invite, and logout MUST use identical flags
+const COOKIE_OPTIONS = {
+  httpOnly: true,
+  secure: env.NODE_ENV === "production",
+  sameSite: env.NODE_ENV === "production" ? "none" : "lax",
+  path: "/",
+};
+
 // login user
 export const login = asyncHandler(async (req, res, next) => {
   const { email, password, expectedRole } = req.body;
@@ -47,9 +55,7 @@ export const login = asyncHandler(async (req, res, next) => {
   );
 
   res.cookie("token", token, {
-    httpOnly: true,
-    secure: env.NODE_ENV === "production",
-    sameSite: env.NODE_ENV === "production" ? "none" : "lax",
+    ...COOKIE_OPTIONS,
     maxAge: 1000 * 60 * 60 * 24 * 7,
   });
 
@@ -109,9 +115,7 @@ export const acceptInvite = asyncHandler(async (req, res, next) => {
   );
 
   res.cookie("token", jwtToken, {
-    httpOnly: true,
-    secure: env.NODE_ENV === "production",
-    sameSite: env.NODE_ENV === "production" ? "none" : "lax",
+    ...COOKIE_OPTIONS,
     maxAge: 1000 * 60 * 60 * 24 * 7,
   });
 
@@ -130,7 +134,17 @@ export const acceptInvite = asyncHandler(async (req, res, next) => {
 
 // logout user
 export const logout = asyncHandler(async (req, res, next) => {
-  res.clearCookie("token");
+  // Triple-clear: use every method to ensure the cookie is destroyed
+  // 1. Overwrite with empty value + immediate expiry
+  res.cookie("token", "", {
+    ...COOKIE_OPTIONS,
+    maxAge: 0,
+  });
+  // 2. Also use clearCookie as a fallback
+  res.clearCookie("token", COOKIE_OPTIONS);
+  // 3. Raw Set-Cookie header as nuclear option
+  res.setHeader("Set-Cookie", "token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Lax");
+
   res
     .status(StatusCodes.OK)
     .json({ success: true, message: "Logout successful" });

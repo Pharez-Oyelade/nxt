@@ -7,7 +7,7 @@ const authRouter = Router();
 authRouter.post("/login", login);
 authRouter.post("/invite/:token", acceptInvite);
 authRouter.get("/me", protect, me);
-authRouter.post("/logout", protect, logout);
+authRouter.post("/logout", logout); // No auth required — must always clear the cookie
 authRouter.get("/admins", protect, restrictTo("admin"), getAdmins);
 authRouter.patch("/settings", protect, updateSettings);
 authRouter.patch("/profile", protect, updateProfile);
