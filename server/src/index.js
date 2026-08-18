@@ -19,6 +19,7 @@ import clientRouter from "./routes/client.routes.js";
 import projectRouter from "./routes/project.routes.js";
 import taskRouter from "./routes/task.routes.js";
 import invoiceRouter from "./routes/invoice.routes.js";
+import dashboardRouter from "./routes/dashboard.routes.js";
 import { handlePaystackWebhook } from "./controllers/invoice.controller.js";
 
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
@@ -47,6 +48,7 @@ app.use("/api/v1/clients", clientRouter);
 app.use("/api/v1/projects", projectRouter);
 app.use("/api/v1/tasks", taskRouter);
 app.use("/api/v1/invoices", invoiceRouter);
+app.use("/api/v1/dashboard", dashboardRouter);
 
 // error handler
 app.use(errorHandler);
