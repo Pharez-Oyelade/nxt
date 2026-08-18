@@ -10,6 +10,8 @@ import Link from "next/link";
 import Script from "next/script";
 import { format } from "date-fns";
 import toast from "react-hot-toast";
+import { formatCurrency } from "@/lib/utils";
+import { useAuthStore } from "@/store/authStore";
 
 declare global {
   interface Window {
@@ -25,6 +27,8 @@ export default function ClientInvoiceDetailPage() {
 
   const { data: invoice, isLoading, error, refetch } = useGetInvoice(invoiceId);
   const [isProcessing, setIsProcessing] = useState(false);
+  const { user } = useAuthStore();
+  const currency = user?.settings?.currency || "NGN";
 
   if (isLoading) {
     return (
@@ -66,7 +70,7 @@ export default function ClientInvoiceDetailPage() {
       key: paystackKey,
       email: invoice.clientId?.email,
       amount: invoice.totalAmount * 100, // Amount in kobo
-      currency: "NGN",
+      currency: currency,
       reference: `INV_${invoice._id}_${Date.now()}`,
       metadata: {
         custom_fields: [
@@ -177,7 +181,7 @@ export default function ClientInvoiceDetailPage() {
                       <tr key={item._id} className="bg-card">
                         <td className="px-4 py-3 text-foreground">{item.desc}</td>
                         <td className="px-4 py-3 text-right font-medium">
-                          ₦{item.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                          {formatCurrency(item.amount, currency)}
                         </td>
                       </tr>
                     ))}
@@ -186,7 +190,7 @@ export default function ClientInvoiceDetailPage() {
                     <tr>
                       <td className="px-4 py-4 text-right font-semibold">Total</td>
                       <td className="px-4 py-4 text-right font-bold text-lg text-primary">
-                        ₦{invoice.totalAmount?.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                        {formatCurrency(invoice.totalAmount, currency)}
                       </td>
                     </tr>
                   </tfoot>

@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:is(.dark *));
 
 :root {
   --background: #ffffff;
@@ -64,35 +65,33 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0b0b0c;
-    --foreground: #f3efe7;
-    --primary: #f3efe7;
-    --primary-foreground: #0b0b0c;
-    --secondary: #2a2724;
-    --secondary-foreground: #f3efe7;
-    --accent: #ff6b4a;
-    --accent-foreground: #ffffff;
-    --muted: #18181b;
-    --muted-foreground: #9c968a;
-    --border: #2a2724;
-    --card: #0b0b0c;
-    --card-foreground: #f3efe7;
-    --popover: #0b0b0c;
-    --popover-foreground: #f3efe7;
-    --destructive: #ef4444;
-    --destructive-foreground: #ffffff;
-    --ring: #d4d4d8;
-    --sidebar-background: #18181b;
-    --sidebar-foreground: #f3efe7;
-    --sidebar-primary: #ff6b4a;
-    --sidebar-primary-foreground: #ffffff;
-    --sidebar-accent: #2a2724;
-    --sidebar-accent-foreground: #f3efe7;
-    --sidebar-border: #2a2724;
-    --sidebar-ring: #d4d4d8;
-  }
+.dark {
+  --background: #0b0b0c;
+  --foreground: #f3efe7;
+  --primary: #f3efe7;
+  --primary-foreground: #0b0b0c;
+  --secondary: #2a2724;
+  --secondary-foreground: #f3efe7;
+  --accent: #ff6b4a;
+  --accent-foreground: #ffffff;
+  --muted: #18181b;
+  --muted-foreground: #9c968a;
+  --border: #2a2724;
+  --card: #0b0b0c;
+  --card-foreground: #f3efe7;
+  --popover: #0b0b0c;
+  --popover-foreground: #f3efe7;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --ring: #d4d4d8;
+  --sidebar-background: #18181b;
+  --sidebar-foreground: #f3efe7;
+  --sidebar-primary: #ff6b4a;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #2a2724;
+  --sidebar-accent-foreground: #f3efe7;
+  --sidebar-border: #2a2724;
+  --sidebar-ring: #d4d4d8;
 }
 
 body {

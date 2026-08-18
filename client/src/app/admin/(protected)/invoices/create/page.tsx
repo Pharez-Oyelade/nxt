@@ -10,15 +10,19 @@ import { Label } from "@/components/ui/label";
 import { Loader2, ArrowLeft, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import { formatCurrency } from "@/lib/utils";
+import { useAuthStore } from "@/store/authStore";
 
 function CreateInvoiceContent() {
   const router = useRouter();
   const { data: projects, isLoading: isLoadingProjects } = useGetProjects();
   const { mutate: createInvoice, isPending } = useCreateInvoice();
+  const { user } = useAuthStore();
+  const currency = user?.settings?.currency || "NGN";
 
   const searchParams = useSearchParams();
   const initialProjectId = searchParams.get("projectId") || "";
-  
+
   const [projectId, setProjectId] = useState(initialProjectId);
 
   useEffect(() => {
@@ -40,7 +44,11 @@ function CreateInvoiceContent() {
     setLineItems(newItems);
   };
 
-  const handleLineItemChange = (index: number, field: string, value: string) => {
+  const handleLineItemChange = (
+    index: number,
+    field: string,
+    value: string,
+  ) => {
     const newItems = [...lineItems] as any;
     newItems[index][field] = value;
     setLineItems(newItems);
@@ -48,7 +56,7 @@ function CreateInvoiceContent() {
 
   const totalAmount = lineItems.reduce(
     (sum, item) => sum + (parseFloat(item.amount) || 0),
-    0
+    0,
   );
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -89,7 +97,7 @@ function CreateInvoiceContent() {
         onSuccess: () => {
           router.push("/admin/invoices");
         },
-      }
+      },
     );
   };
 
@@ -130,7 +138,8 @@ function CreateInvoiceContent() {
                 <option value="">Select a project...</option>
                 {projects?.map((project: any) => (
                   <option key={project._id} value={project._id}>
-                    {project.title} ({project.clientId?.companyName || "Unknown"})
+                    {project.title} (
+                    {project.clientId?.companyName || "Unknown"})
                   </option>
                 ))}
               </select>
@@ -157,23 +166,31 @@ function CreateInvoiceContent() {
             {lineItems.map((item, index) => (
               <div key={index} className="flex items-start gap-4">
                 <div className="flex-1 space-y-2">
-                  <Label className={index !== 0 ? "sr-only" : ""}>Description</Label>
+                  <Label className={index !== 0 ? "sr-only" : ""}>
+                    Description
+                  </Label>
                   <Input
                     placeholder="E.g., Website Design"
                     value={item.desc}
-                    onChange={(e) => handleLineItemChange(index, "desc", e.target.value)}
+                    onChange={(e) =>
+                      handleLineItemChange(index, "desc", e.target.value)
+                    }
                     required
                   />
                 </div>
                 <div className="w-32 space-y-2">
-                  <Label className={index !== 0 ? "sr-only" : ""}>Amount (₦)</Label>
+                  <Label className={index !== 0 ? "sr-only" : ""}>
+                    Amount ({currency === "USD" ? "$" : "₦"})
+                  </Label>
                   <Input
                     type="number"
                     min="1"
                     step="0.01"
                     placeholder="0.00"
                     value={item.amount}
-                    onChange={(e) => handleLineItemChange(index, "amount", e.target.value)}
+                    onChange={(e) =>
+                      handleLineItemChange(index, "amount", e.target.value)
+                    }
                     required
                   />
                 </div>
@@ -207,7 +224,7 @@ function CreateInvoiceContent() {
             <div className="text-right">
               <p className="text-sm text-muted-foreground">Total Amount</p>
               <p className="text-2xl font-bold text-primary">
-                ₦{totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                {formatCurrency(totalAmount, currency)}
               </p>
             </div>
           </div>
@@ -222,7 +239,7 @@ function CreateInvoiceContent() {
           >
             Cancel
           </Button>
-          <Button type="submit" disabled={isPending}>
+          <Button type="submit" disabled={isPending} className="text-primary">
             {isPending ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Creating...
@@ -239,7 +256,13 @@ function CreateInvoiceContent() {
 
 export default function CreateInvoicePage() {
   return (
-    <Suspense fallback={<div className="flex-1 p-8 flex justify-center items-center"><Loader2 className="w-8 h-8 animate-spin text-muted-foreground" /></div>}>
+    <Suspense
+      fallback={
+        <div className="flex-1 p-8 flex justify-center items-center">
+          <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+        </div>
+      }
+    >
       <CreateInvoiceContent />
     </Suspense>
   );

@@ -41,9 +41,9 @@ export default function ProjectsPage() {
           </p>
         </div>
 
-        <CreateProjectDialog 
-          open={isDialogOpen} 
-          onOpenChange={setIsDialogOpen} 
+        <CreateProjectDialog
+          open={isDialogOpen}
+          onOpenChange={setIsDialogOpen}
         />
       </div>
 
@@ -53,7 +53,9 @@ export default function ProjectsPage() {
         </div>
       ) : error ? (
         <div className="flex flex-col items-center justify-center min-h-[400px]">
-          <p className="text-destructive font-medium mb-4">Failed to load projects.</p>
+          <p className="text-destructive font-medium mb-4">
+            Failed to load projects.
+          </p>
         </div>
       ) : (
         <KanbanBoard />
@@ -62,17 +64,23 @@ export default function ProjectsPage() {
   );
 }
 
-function CreateProjectDialog({ open, onOpenChange }: { open: boolean, onOpenChange: (open: boolean) => void }) {
+function CreateProjectDialog({
+  open,
+  onOpenChange,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
   const { data: clients, isLoading: clientsLoading } = useGetClients();
   const createMutation = useCreateProject();
-  
+
   const [clientId, setClientId] = useState("");
   const [title, setTitle] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!clientId || !title) return;
-    
+
     await createMutation.mutateAsync({ clientId, title });
     setClientId("");
     setTitle("");
@@ -81,7 +89,11 @@ function CreateProjectDialog({ open, onOpenChange }: { open: boolean, onOpenChan
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogTrigger render={<Button className="h-10 bg-accent hover:bg-accent/90 text-white shadow-md rounded-xl px-4" />}>
+      <DialogTrigger
+        render={
+          <Button className="h-10 bg-accent hover:bg-accent/90 text-white shadow-md px-4" />
+        }
+      >
         <Plus className="w-4 h-4 sm:mr-2" />
         <span className="hidden sm:inline">Create Project</span>
       </DialogTrigger>
@@ -96,7 +108,9 @@ function CreateProjectDialog({ open, onOpenChange }: { open: boolean, onOpenChan
           <div className="space-y-2">
             <label className="text-sm font-medium">Select Client</label>
             {clientsLoading ? (
-              <div className="h-10 flex items-center px-3 border border-input rounded-md bg-muted/50 text-sm text-muted-foreground">Loading clients...</div>
+              <div className="h-10 flex items-center px-3 border border-input rounded-md bg-muted/50 text-sm text-muted-foreground">
+                Loading clients...
+              </div>
             ) : (
               <select
                 value={clientId}
@@ -104,7 +118,9 @@ function CreateProjectDialog({ open, onOpenChange }: { open: boolean, onOpenChan
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
                 required
               >
-                <option value="" disabled>-- Choose a client --</option>
+                <option value="" disabled>
+                  -- Choose a client --
+                </option>
                 {clients?.map((client) => (
                   <option key={client._id} value={client._id}>
                     {client.companyName}
@@ -115,21 +131,23 @@ function CreateProjectDialog({ open, onOpenChange }: { open: boolean, onOpenChan
           </div>
           <div className="space-y-2">
             <label className="text-sm font-medium">Project Title</label>
-            <Input 
-              value={title} 
-              onChange={(e) => setTitle(e.target.value)} 
-              placeholder="e.g. Website Redesign" 
+            <Input
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="e.g. Website Redesign"
               required
               className="h-10"
             />
           </div>
           <div className="pt-2 flex justify-end">
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               disabled={createMutation.isPending || !clientId || !title}
               className="bg-accent hover:bg-accent/90 text-white"
             >
-              {createMutation.isPending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
+              {createMutation.isPending ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              ) : null}
               Create Project
             </Button>
           </div>

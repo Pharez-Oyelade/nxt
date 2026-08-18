@@ -98,3 +98,25 @@ export function useGetAdmins() {
     },
   });
 }
+
+export function useUpdateSettings() {
+  const queryClient = useQueryClient();
+  const { user, setAuth } = useAuthStore();
+
+  return useMutation({
+    mutationFn: async (settings: { currency: string }) => {
+      const response = await api.patch("/auth/settings", settings);
+      return response.data;
+    },
+    onSuccess: (data) => {
+      if (user) {
+        setAuth({ ...user, settings: data.settings });
+        queryClient.setQueryData(["auth", "me"], { user: { ...user, settings: data.settings } });
+      }
+      notify.success(data.message || "Settings updated successfully");
+    },
+    onError: (error: any) => {
+      notify.error(error.response?.data?.message || error.message || "Failed to update settings");
+    },
+  });
+}

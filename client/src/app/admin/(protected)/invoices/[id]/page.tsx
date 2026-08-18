@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Loader2, ArrowLeft, Send, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import { format } from "date-fns";
+import { formatCurrency } from "@/lib/utils";
+import { useAuthStore } from "@/store/authStore";
 
 export default function AdminInvoiceDetailPage() {
   const params = useParams();
@@ -15,6 +17,8 @@ export default function AdminInvoiceDetailPage() {
 
   const { data: invoice, isLoading, error } = useGetInvoice(invoiceId);
   const { mutate: sendInvoice, isPending: isSending } = useSendInvoice();
+  const { user } = useAuthStore();
+  const currency = user?.settings?.currency || "NGN";
 
   if (isLoading) {
     return (
@@ -123,7 +127,7 @@ export default function AdminInvoiceDetailPage() {
                       <tr key={item._id} className="bg-card">
                         <td className="px-4 py-3 text-foreground">{item.desc}</td>
                         <td className="px-4 py-3 text-right font-medium">
-                          ₦{item.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                          {formatCurrency(item.amount, currency)}
                         </td>
                       </tr>
                     ))}
@@ -132,7 +136,7 @@ export default function AdminInvoiceDetailPage() {
                     <tr>
                       <td className="px-4 py-4 text-right font-semibold">Total</td>
                       <td className="px-4 py-4 text-right font-bold text-lg text-primary">
-                        ₦{invoice.totalAmount?.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                        {formatCurrency(invoice.totalAmount, currency)}
                       </td>
                     </tr>
                   </tfoot>

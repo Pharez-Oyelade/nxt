@@ -61,6 +61,7 @@ export const login = asyncHandler(async (req, res, next) => {
       email: user.email,
       role: user.role,
       clientId: user.clientId || null,
+      settings: user.settings || { currency: "NGN" },
     },
   });
 });
@@ -122,6 +123,7 @@ export const acceptInvite = asyncHandler(async (req, res, next) => {
       email: user.email,
       role: user.role,
       clientId: user.clientId || null,
+      settings: user.settings || { currency: "NGN" },
     },
   });
 });
@@ -144,4 +146,21 @@ export const me = asyncHandler(async (req, res, next) => {
 export const getAdmins = asyncHandler(async (req, res, next) => {
   const admins = await User.find({ role: "admin" }).select("name email");
   res.json({ admins });
+});
+
+// update user settings
+export const updateSettings = asyncHandler(async (req, res, next) => {
+  const { currency } = req.body;
+
+  const user = await User.findById(req.user.userId);
+  if (!user) {
+    throw new AppError("User not found", StatusCodes.NOT_FOUND);
+  }
+
+  if (currency && ["NGN", "USD"].includes(currency)) {
+    user.settings = { ...user.settings, currency };
+    await user.save();
+  }
+
+  res.json({ settings: user.settings, message: "Settings updated successfully" });
 });
