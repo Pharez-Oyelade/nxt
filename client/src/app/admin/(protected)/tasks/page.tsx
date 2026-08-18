@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useGetAllTasks, useUpdateTask } from "@/hooks/useProjects";
-import { Loader2, CheckCircle2, Circle, Clock, User, Briefcase, LayoutList, Layers } from "lucide-react";
+import { Loader2, CheckCircle2, Circle, Clock, User, Briefcase, LayoutList, Layers, AlertCircle } from "lucide-react";
 import { format } from "date-fns";
 import Link from "next/link";
 
@@ -44,6 +44,31 @@ export default function TasksPage() {
     });
     
     return groups;
+  }, [tasks]);
+
+  const tasksByStatus = React.useMemo(() => {
+    if (!tasks) return { pastDue: [], inProgress: [], completed: [] };
+    
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+
+    const pastDue: any[] = [];
+    const inProgress: any[] = [];
+    const completed: any[] = [];
+
+    tasks.forEach((task: any) => {
+      if (task.status === "completed") {
+        completed.push(task);
+      } else {
+        if (task.dueDate && new Date(task.dueDate) < now) {
+          pastDue.push(task);
+        } else {
+          inProgress.push(task);
+        }
+      }
+    });
+
+    return { pastDue, inProgress, completed };
   }, [tasks]);
 
   if (isLoading) {
@@ -157,8 +182,42 @@ export default function TasksPage() {
       <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm">
         {tasks && tasks.length > 0 ? (
           viewMode === "list" ? (
-            <div className="space-y-3">
-              {tasks.map((task: any) => renderTask(task))}
+            <div className="space-y-8">
+              {tasksByStatus.pastDue.length > 0 && (
+                <div className="space-y-3">
+                  <h3 className="text-sm font-semibold text-destructive flex items-center gap-2 uppercase tracking-wider px-1">
+                    <AlertCircle className="w-4 h-4" /> Past Due
+                    <span className="bg-destructive/10 text-destructive px-2 py-0.5 rounded-full text-xs ml-2">
+                      {tasksByStatus.pastDue.length}
+                    </span>
+                  </h3>
+                  {tasksByStatus.pastDue.map((task: any) => renderTask(task))}
+                </div>
+              )}
+              
+              {tasksByStatus.inProgress.length > 0 && (
+                <div className="space-y-3">
+                  <h3 className="text-sm font-semibold text-primary flex items-center gap-2 uppercase tracking-wider px-1">
+                    <Clock className="w-4 h-4" /> In Progress
+                    <span className="bg-primary/10 text-primary px-2 py-0.5 rounded-full text-xs ml-2">
+                      {tasksByStatus.inProgress.length}
+                    </span>
+                  </h3>
+                  {tasksByStatus.inProgress.map((task: any) => renderTask(task))}
+                </div>
+              )}
+
+              {tasksByStatus.completed.length > 0 && (
+                <div className="space-y-3">
+                  <h3 className="text-sm font-semibold text-emerald-600 dark:text-emerald-500 flex items-center gap-2 uppercase tracking-wider px-1">
+                    <CheckCircle2 className="w-4 h-4" /> Completed
+                    <span className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-500 px-2 py-0.5 rounded-full text-xs ml-2">
+                      {tasksByStatus.completed.length}
+                    </span>
+                  </h3>
+                  {tasksByStatus.completed.map((task: any) => renderTask(task))}
+                </div>
+              )}
             </div>
           ) : (
             <div className="space-y-8">

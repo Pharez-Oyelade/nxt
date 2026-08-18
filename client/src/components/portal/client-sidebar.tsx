@@ -26,6 +26,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuBadge,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import {
   DropdownMenu,
@@ -91,6 +92,7 @@ const navItems = [
 export function ClientSidebar() {
   const pathname = usePathname();
   const { user, clearAuth } = useAuthStore();
+  const { setOpenMobile, isMobile } = useSidebar();
 
   const handleLogout = () => {
     clearAuth();
@@ -134,7 +136,7 @@ export function ClientSidebar() {
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton
                         isActive={isActive}
-                        render={<Link href={item.url} />}
+                        render={<Link href={item.url} onClick={() => isMobile && setOpenMobile(false)} />}
                       >
                         <item.icon />
                         <span>{item.title}</span>
@@ -213,7 +215,7 @@ export function ClientSidebar() {
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     render={
-                      <Link href="/portal/settings" className="w-full cursor-pointer flex items-center" />
+                      <Link href="/portal/settings" className="w-full cursor-pointer flex items-center" onClick={() => isMobile && setOpenMobile(false)} />
                     }
                   >
                     <Settings className="mr-2 h-4 w-4" />

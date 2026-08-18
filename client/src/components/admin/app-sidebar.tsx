@@ -29,6 +29,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import {
   DropdownMenu,
@@ -113,6 +114,7 @@ const navItems = [
 export function AppSidebar() {
   const pathname = usePathname();
   const { user, clearAuth } = useAuthStore();
+  const { setOpenMobile, isMobile } = useSidebar();
 
   const handleLogout = () => {
     clearAuth();
@@ -156,7 +158,7 @@ export function AppSidebar() {
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton
                         isActive={isActive}
-                        render={<Link href={item.url} />}
+                        render={<Link href={item.url} onClick={() => isMobile && setOpenMobile(false)} />}
                       >
                         <item.icon />
                         <span>{item.title}</span>
@@ -232,7 +234,7 @@ export function AppSidebar() {
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     render={
-                      <Link href="/admin/settings" className="w-full cursor-pointer flex items-center" />
+                      <Link href="/admin/settings" className="w-full cursor-pointer flex items-center" onClick={() => isMobile && setOpenMobile(false)} />
                     }
                   >
                     <Settings className="mr-2 h-4 w-4" />
