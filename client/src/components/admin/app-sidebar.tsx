@@ -15,6 +15,7 @@ import {
   Settings,
   User as UserIcon,
   ChevronsUpDown,
+  MessageSquare,
 } from "lucide-react";
 
 import {
@@ -84,6 +85,11 @@ const navItems = [
         title: "Leads",
         url: "/admin/leads",
         icon: Target,
+      },
+      {
+        title: "Communications",
+        url: "/admin/communications",
+        icon: MessageSquare,
       },
     ],
   },
@@ -224,7 +230,11 @@ export function AppSidebar() {
                     <UserIcon className="mr-2 h-4 w-4" />
                     Account
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                    render={
+                      <Link href="/admin/settings" className="w-full cursor-pointer flex items-center" />
+                    }
+                  >
                     <Settings className="mr-2 h-4 w-4" />
                     Settings
                   </DropdownMenuItem>

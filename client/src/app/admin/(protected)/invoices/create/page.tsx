@@ -10,11 +10,15 @@ import { Label } from "@/components/ui/label";
 import { Loader2, ArrowLeft, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import { formatCurrency } from "@/lib/utils";
+import { useAuthStore } from "@/store/authStore";
 
 function CreateInvoiceContent() {
   const router = useRouter();
   const { data: projects, isLoading: isLoadingProjects } = useGetProjects();
   const { mutate: createInvoice, isPending } = useCreateInvoice();
+  const { user } = useAuthStore();
+  const currency = user?.settings?.currency || "NGN";
 
   const searchParams = useSearchParams();
   const initialProjectId = searchParams.get("projectId") || "";
@@ -176,7 +180,7 @@ function CreateInvoiceContent() {
                 </div>
                 <div className="w-32 space-y-2">
                   <Label className={index !== 0 ? "sr-only" : ""}>
-                    Amount (₦)
+                    Amount ({currency === "USD" ? "$" : "₦"})
                   </Label>
                   <Input
                     type="number"
@@ -220,11 +224,7 @@ function CreateInvoiceContent() {
             <div className="text-right">
               <p className="text-sm text-muted-foreground">Total Amount</p>
               <p className="text-2xl font-bold text-primary">
-                ₦
-                {totalAmount.toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
+                {formatCurrency(totalAmount, currency)}
               </p>
             </div>
           </div>

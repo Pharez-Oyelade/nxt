@@ -211,7 +211,11 @@ export function ClientSidebar() {
                     <UserIcon className="mr-2 h-4 w-4" />
                     Account
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                    render={
+                      <Link href="/portal/settings" className="w-full cursor-pointer flex items-center" />
+                    }
+                  >
                     <Settings className="mr-2 h-4 w-4" />
                     Settings
                   </DropdownMenuItem>

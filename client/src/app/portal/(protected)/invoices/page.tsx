@@ -6,9 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Loader2, FileText, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { format } from "date-fns";
+import { formatCurrency } from "@/lib/utils";
+import { useAuthStore } from "@/store/authStore";
 
 export default function ClientInvoicesPage() {
   const { data: invoices, isLoading } = useGetClientInvoices();
+  const { user } = useAuthStore();
+  const currency = user?.settings?.currency || "NGN";
 
   return (
     <div className="flex-1 p-4 md:p-8 pt-6 max-w-7xl mx-auto space-y-6 w-full pb-12">
@@ -49,7 +53,7 @@ export default function ClientInvoicesPage() {
                   </div>
                   <div>
                     <h4 className="text-sm font-semibold text-foreground">
-                      {invoice.invoiceNumber} • ₦{invoice.totalAmount.toLocaleString()}
+                      {invoice.invoiceNumber} • {formatCurrency(invoice.totalAmount, currency)}
                     </h4>
                     <p className="text-xs text-muted-foreground mt-0.5">
                       {invoice.projectId?.title || "Project Invoice"}
