@@ -80,24 +80,24 @@ export default function ProjectDetailPage() {
 
   return (
     <div className="flex-1 p-4 md:p-8 pt-6 max-w-5xl mx-auto space-y-6 w-full pb-12">
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-start sm:items-center gap-3 sm:gap-4">
           <Link
             href="/admin/projects"
-            className="inline-flex items-center justify-center h-10 w-10 rounded-full hover:bg-muted transition-colors text-muted-foreground"
+            className="inline-flex items-center justify-center h-8 w-8 sm:h-10 sm:w-10 rounded-full hover:bg-muted transition-colors text-muted-foreground mt-1 sm:mt-0 shrink-0"
           >
             <ArrowLeft className="w-5 h-5" />
           </Link>
-          <div className="flex items-center gap-3">
-            <h2 className="text-3xl font-bold tracking-tight text-primary">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-primary">
               Project Details
             </h2>
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium capitalize bg-accent/10 text-accent border border-accent/20">
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize bg-accent/10 text-accent border border-accent/20 shrink-0">
               {project.phase}
             </span>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 pl-11 sm:pl-0">
           <Button nativeButton={false} render={<Link href={`/admin/invoices/create?projectId=${projectId}`} />} variant="outline">
             Generate Invoice
           </Button>
@@ -131,7 +131,7 @@ export default function ProjectDetailPage() {
 
           {/* Deliverables Section */}
           <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm">
-            <div className="flex items-center justify-between border-b border-border/40 pb-3 mb-6">
+            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border/40 pb-3 mb-6">
               <h3 className="text-lg font-semibold">Deliverables & Files</h3>
 
               <div>

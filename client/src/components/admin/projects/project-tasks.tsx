@@ -72,7 +72,7 @@ export function ProjectTasks({ projectId }: { projectId: string }) {
 
   return (
     <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm mt-6">
-      <div className="flex items-center justify-between border-b border-border/40 pb-3 mb-6">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border/40 pb-3 mb-6">
         <h3 className="text-lg font-semibold">Project Tasks</h3>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger render={<Button size="sm" className="h-8 shadow-sm" />}>
@@ -166,7 +166,7 @@ export function ProjectTasks({ projectId }: { projectId: string }) {
                   <p className="text-xs text-muted-foreground mt-1 line-clamp-1">{task.description}</p>
                 )}
                 
-                <div className="flex items-center gap-4 mt-3">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-3">
                   <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider ${getStatusColor(task.status)}`}>
                     {task.status}
                   </span>
