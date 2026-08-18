@@ -1,5 +1,8 @@
 "use client";
 
+import React from "react";
+import { usePathname } from "next/navigation";
+
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/admin/app-sidebar";
@@ -15,6 +18,8 @@ export default function ProtectedAdminLayout({
   children: React.ReactNode;
 }) {
   const { user, isLoading, isAuthenticated } = useAuthGuard("admin");
+  const pathname = usePathname();
+  const paths = pathname.split("/").filter(Boolean);
 
   if (isLoading) return <div className="p-8 text-sm">Checking session...</div>;
   if (!isAuthenticated) return null;
@@ -29,13 +34,29 @@ export default function ProtectedAdminLayout({
             <Separator orientation="vertical" className="mr-2 h-4" />
             <Breadcrumb>
               <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="/admin">Dashboard</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Overview</BreadcrumbPage>
-                </BreadcrumbItem>
+                {paths.map((path, index) => {
+                  const href = "/" + paths.slice(0, index + 1).join("/");
+                  const isLast = index === paths.length - 1;
+                  const text =
+                    path.toLowerCase() === "admin"
+                      ? "Dashboard"
+                      : path.charAt(0).toUpperCase() + path.slice(1).replace(/-/g, " ");
+
+                  return (
+                    <React.Fragment key={href}>
+                      {index > 0 && (
+                        <BreadcrumbSeparator className={index === 1 ? "hidden md:block" : ""} />
+                      )}
+                      <BreadcrumbItem className={index === 0 && !isLast ? "hidden md:block" : ""}>
+                        {isLast ? (
+                          <BreadcrumbPage>{text}</BreadcrumbPage>
+                        ) : (
+                          <BreadcrumbLink href={href}>{text}</BreadcrumbLink>
+                        )}
+                      </BreadcrumbItem>
+                    </React.Fragment>
+                  );
+                })}
               </BreadcrumbList>
             </Breadcrumb>
           </div>
