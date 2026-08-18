@@ -26,6 +26,7 @@ dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 const app = express();
 app.disable("etag"); // Prevent 304 responses — API data must never be served from browser cache
+app.set("trust proxy", 1); // Trust the first proxy (e.g., Vercel, Render) for secure cookies
 
 // middlewares
 app.use(helmet());
