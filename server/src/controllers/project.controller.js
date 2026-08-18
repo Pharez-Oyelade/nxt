@@ -5,7 +5,7 @@ import asyncHandler from "../utils/asyncHandler.js";
 import { AppError } from "../middleware/errorHandler.js";
 import { StatusCodes } from "http-status-codes";
 
-const PHASES = [
+export const PHASES = [
   "proposed",
   "discovery",
   "design",
@@ -31,7 +31,7 @@ export const getProjects = asyncHandler(async (req, res) => {
 export const getProject = asyncHandler(async (req, res) => {
   const project = await Project.findById(req.params.id).populate(
     "clientId",
-    "companyName primaryContactName"
+    "companyName primaryContactName",
   );
 
   if (!project) {
@@ -108,7 +108,7 @@ export const addFile = asyncHandler(async (req, res) => {
 
   const ext = req.file.originalname.split(".").pop()?.toLowerCase() || "";
   const isImageOrPdf = ["jpg", "jpeg", "png", "webp", "pdf"].includes(ext);
-  
+
   const resourceType = isImageOrPdf ? "image" : "raw";
   const uploadType = isImageOrPdf ? "upload" : "authenticated";
 
@@ -149,7 +149,10 @@ export const proposeProject = asyncHandler(async (req, res) => {
   const { title, description } = req.body;
 
   if (!title) {
-    throw new AppError("Please provide a project title", StatusCodes.BAD_REQUEST);
+    throw new AppError(
+      "Please provide a project title",
+      StatusCodes.BAD_REQUEST,
+    );
   }
 
   const project = await Project.create({
