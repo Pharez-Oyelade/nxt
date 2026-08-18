@@ -94,7 +94,7 @@ export default function BlogSection() {
             ) : publishedBlogs.length > 0 ? (
               publishedBlogs.map((blog: any) => (
                 <Link
-                  href={`/blog/${blog._id}`}
+                  href={`/blogs/${blog.slug || blog._id}`}
                   key={blog._id}
                   className="min-w-[300px] md:min-w-[400px] max-w-[400px] shrink-0 snap-start group"
                 >

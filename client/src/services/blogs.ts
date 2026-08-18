@@ -12,6 +12,12 @@ export const getPublishedBlogs = async () => {
   return response.data.blogPosts;
 };
 
+// Fetch a single published blog by slug (public view)
+export const getPublishedBlog = async (slug: string) => {
+  const response = await api.get(`/blogs/${slug}`);
+  return response.data.blogPost;
+};
+
 // Fetch a single blog by ID
 export const getBlog = async (id: string) => {
   const response = await api.get(`/blogs/admin/${id}`);
