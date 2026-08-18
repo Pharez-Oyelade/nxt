@@ -228,7 +228,11 @@ export function AppSidebar() {
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                    render={
+                      <Link href="/admin/account" className="w-full cursor-pointer flex items-center" onClick={() => isMobile && setOpenMobile(false)} />
+                    }
+                  >
                     <UserIcon className="mr-2 h-4 w-4" />
                     Account
                   </DropdownMenuItem>
