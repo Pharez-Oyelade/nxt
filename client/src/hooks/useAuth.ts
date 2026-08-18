@@ -120,3 +120,40 @@ export function useUpdateSettings() {
     },
   });
 }
+
+export function useUpdateProfile() {
+  const queryClient = useQueryClient();
+  const { user, setAuth } = useAuthStore();
+
+  return useMutation({
+    mutationFn: async (data: { name?: string; email?: string }) => {
+      const response = await api.patch("/auth/profile", data);
+      return response.data;
+    },
+    onSuccess: (data) => {
+      if (data.user && user) {
+        setAuth({ ...user, ...data.user });
+        queryClient.setQueryData(["auth", "me"], { user: { ...user, ...data.user } });
+      }
+      notify.success(data.message || "Profile updated successfully");
+    },
+    onError: (error: any) => {
+      notify.error(error.response?.data?.message || error.message || "Failed to update profile");
+    },
+  });
+}
+
+export function useUpdatePassword() {
+  return useMutation({
+    mutationFn: async (data: { currentPassword?: string; newPassword?: string }) => {
+      const response = await api.patch("/auth/password", data);
+      return response.data;
+    },
+    onSuccess: (data) => {
+      notify.success(data.message || "Password updated successfully");
+    },
+    onError: (error: any) => {
+      notify.error(error.response?.data?.message || error.message || "Failed to update password");
+    },
+  });
+}
