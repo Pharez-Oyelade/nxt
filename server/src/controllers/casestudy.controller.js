@@ -2,6 +2,7 @@ import CaseStudy from "../models/casestudyModel.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import cloudinary from "../config/cloudinary.js";
 import slugify from "slugify";
+import mongoose from "mongoose";
 
 // get all case studies
 export const getCaseStudies = asyncHandler(async (req, res, next) => {
@@ -11,7 +12,16 @@ export const getCaseStudies = asyncHandler(async (req, res, next) => {
 
 // get single case study
 export const getCaseStudy = asyncHandler(async (req, res, next) => {
-  const caseStudy = await CaseStudy.findById(req.params.id);
+  const { id } = req.params;
+  const isMongoId = mongoose.Types.ObjectId.isValid(id);
+  
+  const query = isMongoId ? { _id: id } : { slug: id };
+  const caseStudy = await CaseStudy.findOne(query);
+
+  if (!caseStudy) {
+    return res.status(404).json({ success: false, message: "Case study not found" });
+  }
+
   res.json({ caseStudy });
 });
 
