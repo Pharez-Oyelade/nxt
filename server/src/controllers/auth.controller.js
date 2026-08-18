@@ -164,3 +164,64 @@ export const updateSettings = asyncHandler(async (req, res, next) => {
 
   res.json({ settings: user.settings, message: "Settings updated successfully" });
 });
+
+// update user profile (name, email)
+export const updateProfile = asyncHandler(async (req, res, next) => {
+  const { name, email } = req.body;
+
+  const user = await User.findById(req.user.userId);
+  if (!user) {
+    throw new AppError("User not found", StatusCodes.NOT_FOUND);
+  }
+
+  if (name) user.name = name;
+  if (email) {
+    // Check if email is already taken
+    const existingUser = await User.findOne({ email });
+    if (existingUser && existingUser._id.toString() !== user._id.toString()) {
+      throw new AppError("Email is already in use", StatusCodes.BAD_REQUEST);
+    }
+    user.email = email;
+  }
+
+  await user.save();
+
+  res.json({
+    message: "Profile updated successfully",
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      clientId: user.clientId || null,
+      settings: user.settings || { currency: "NGN" },
+    },
+  });
+});
+
+// update password
+export const updatePassword = asyncHandler(async (req, res, next) => {
+  const { currentPassword, newPassword } = req.body;
+
+  if (!currentPassword || !newPassword) {
+    throw new AppError("Please provide both current and new passwords", StatusCodes.BAD_REQUEST);
+  }
+
+  const user = await User.findById(req.user.userId);
+  if (!user) {
+    throw new AppError("User not found", StatusCodes.NOT_FOUND);
+  }
+
+  // check if current password is correct
+  const isPasswordCorrect = await bcrypt.compare(currentPassword, user.password);
+  if (!isPasswordCorrect) {
+    throw new AppError("Incorrect current password", StatusCodes.UNAUTHORIZED);
+  }
+
+  // hash and set new password
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(newPassword, salt);
+  await user.save();
+
+  res.json({ message: "Password updated successfully" });
+});
