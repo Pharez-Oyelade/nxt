@@ -142,8 +142,6 @@ export const logout = asyncHandler(async (req, res, next) => {
   });
   // 2. Also use clearCookie as a fallback
   res.clearCookie("token", COOKIE_OPTIONS);
-  // 3. Raw Set-Cookie header as nuclear option
-  res.setHeader("Set-Cookie", "token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Lax");
 
   res
     .status(StatusCodes.OK)
