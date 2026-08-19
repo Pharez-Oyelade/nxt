@@ -35,6 +35,7 @@ const formSchema = z.object({
   description: z.string().optional(),
   slug: z.string().optional(),
   status: z.enum(["draft", "published", "archived"]),
+  selected: z.boolean().default(false),
   coverImage: z.any().optional(),
   contentBlocks: z
     .array(contentBlockSchema)
@@ -57,6 +58,7 @@ const DEFAULT_VALUES: CaseStudyFormValues = {
   description: "",
   slug: "",
   status: "draft",
+  selected: false,
   coverImage: undefined,
   contentBlocks: [{ type: "text", content: "" }],
 };
@@ -67,6 +69,7 @@ function buildFormData(data: CaseStudyFormValues): FormData {
   if (data.description) fd.append("description", data.description);
   if (data.slug) fd.append("slug", data.slug);
   fd.append("status", data.status);
+  fd.append("selected", String(data.selected));
   fd.append("contentBlocks", JSON.stringify(data.contentBlocks));
   if (data.coverImage instanceof File) {
     fd.append("coverImage", data.coverImage);
@@ -117,6 +120,7 @@ export function CaseStudyForm({ mode, initialData }: CaseStudyFormProps) {
         description: initialData.description ?? "",
         slug: initialData.slug,
         status: initialData.status,
+        selected: initialData.selected ?? false,
         coverImage: initialData.coverImage?.[0]?.url ?? undefined,
         contentBlocks: blocks,
       });
@@ -195,6 +199,20 @@ export function CaseStudyForm({ mode, initialData }: CaseStudyFormProps) {
               <option value="published">Published</option>
               <option value="archived">Archived</option>
             </select>
+          </div>
+
+          <div className="space-y-2 md:col-span-1 flex items-center h-full pt-6">
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                {...register("selected")}
+                className="w-5 h-5 rounded border-input bg-background text-primary focus:ring-2 focus:ring-accent transition-all duration-200"
+              />
+              <div className="flex flex-col">
+                <span className="text-sm font-medium leading-none">Selected Work</span>
+                <span className="text-xs text-muted-foreground mt-1">Feature this on the mega-menu</span>
+              </div>
+            </label>
           </div>
         </div>
       </section>
