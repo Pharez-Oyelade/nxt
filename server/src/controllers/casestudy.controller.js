@@ -10,6 +10,9 @@ export const getCaseStudies = asyncHandler(async (req, res, next) => {
   if (req.query.selected === "true") {
     query.selected = true;
   }
+  if (req.query.status) {
+    query.status = req.query.status;
+  }
   
   let dbQuery = CaseStudy.find(query).sort({ order: 1, createdAt: -1 });
   

@@ -20,11 +20,13 @@ export interface CaseStudy {
 
 export const getCaseStudies = async (
   selected?: boolean,
-  limit?: number
+  limit?: number,
+  status?: string
 ): Promise<CaseStudy[]> => {
   const params = new URLSearchParams();
   if (selected !== undefined) params.append("selected", String(selected));
   if (limit !== undefined) params.append("limit", String(limit));
+  if (status !== undefined) params.append("status", status);
   
   const queryString = params.toString() ? `?${params.toString()}` : "";
   const { data } = await api.get(`/casestudies${queryString}`);

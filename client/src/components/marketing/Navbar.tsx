@@ -13,7 +13,7 @@ const Navbar = () => {
   const pathname = usePathname();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { data: selectedWorks } = useGetCaseStudies(true, 4);
+  const { data: selectedWorks } = useGetCaseStudies(true, 4, "published");
 
   // Close dropdown on mouse leave
   const handleMouseLeave = () => setActiveDropdown(null);
