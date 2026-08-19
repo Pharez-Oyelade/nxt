@@ -42,6 +42,10 @@ const caseStudySchema = new mongoose.Schema({
     enum: ["draft", "published", "archived"],
     default: "draft",
   },
+  selected: {
+    type: Boolean,
+    default: false,
+  },
   order: {
     type: Number,
     default: 0,

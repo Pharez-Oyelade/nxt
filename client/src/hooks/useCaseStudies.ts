@@ -9,10 +9,10 @@ import {
 import { notify } from "@/lib/toast";
 import { useRouter } from "next/navigation";
 
-export const useGetCaseStudies = () => {
+export const useGetCaseStudies = (selected?: boolean, limit?: number) => {
   return useQuery({
-    queryKey: ["caseStudies"],
-    queryFn: getCaseStudies,
+    queryKey: ["caseStudies", { selected, limit }],
+    queryFn: () => getCaseStudies(selected, limit),
   });
 };
 

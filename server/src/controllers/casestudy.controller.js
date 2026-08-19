@@ -6,7 +6,18 @@ import mongoose from "mongoose";
 
 // get all case studies
 export const getCaseStudies = asyncHandler(async (req, res, next) => {
-  const caseStudies = await CaseStudy.find();
+  const query = {};
+  if (req.query.selected === "true") {
+    query.selected = true;
+  }
+  
+  let dbQuery = CaseStudy.find(query).sort({ order: 1, createdAt: -1 });
+  
+  if (req.query.limit) {
+    dbQuery = dbQuery.limit(parseInt(req.query.limit, 10));
+  }
+  
+  const caseStudies = await dbQuery;
   res.json({ caseStudies });
 });
 
@@ -27,7 +38,7 @@ export const getCaseStudy = asyncHandler(async (req, res, next) => {
 
 // create a case study
 export const createCaseStudy = asyncHandler(async (req, res, next) => {
-  const { title, description, status, order } = req.body;
+  const { title, description, status, order, selected } = req.body;
   let { contentBlocks, slug } = req.body;
 
   if (!title) {
@@ -79,6 +90,7 @@ export const createCaseStudy = asyncHandler(async (req, res, next) => {
     contentBlocks: contentBlocks || [],
     status: status || "draft",
     order: order || 0,
+    selected: selected === "true" || selected === true,
   });
 
   res.status(201).json({
@@ -95,12 +107,13 @@ export const updateCaseStudy = asyncHandler(async (req, res, next) => {
     return res.status(404).json({ success: false, message: "Case study not found" });
   }
 
-  const { title, description, status } = req.body;
+  const { title, description, status, selected } = req.body;
   let { contentBlocks, slug } = req.body;
   
   if (title) caseStudy.title = title;
   if (description !== undefined) caseStudy.description = description;
   if (status) caseStudy.status = status;
+  if (selected !== undefined) caseStudy.selected = selected === "true" || selected === true;
   if (slug) {
     const existing = await CaseStudy.findOne({ slug, _id: { $ne: req.params.id } });
     if (existing) return res.status(400).json({ success: false, message: "Slug already in use" });

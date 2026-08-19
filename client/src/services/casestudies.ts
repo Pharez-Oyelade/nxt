@@ -14,11 +14,20 @@ export interface CaseStudy {
   contentBlocks: ContentBlock[];
   status: "draft" | "published" | "archived";
   order: number;
+  selected?: boolean;
   createdAt: string;
 }
 
-export const getCaseStudies = async (): Promise<CaseStudy[]> => {
-  const { data } = await api.get("/casestudies");
+export const getCaseStudies = async (
+  selected?: boolean,
+  limit?: number
+): Promise<CaseStudy[]> => {
+  const params = new URLSearchParams();
+  if (selected !== undefined) params.append("selected", String(selected));
+  if (limit !== undefined) params.append("limit", String(limit));
+  
+  const queryString = params.toString() ? `?${params.toString()}` : "";
+  const { data } = await api.get(`/casestudies${queryString}`);
   return data.caseStudies || [];
 };
 
