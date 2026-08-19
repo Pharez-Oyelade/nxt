@@ -25,7 +25,6 @@ import { handlePaystackWebhook } from "./controllers/invoice.controller.js";
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 const app = express();
-app.disable("etag"); // Prevent 304 responses — API data must never be served from browser cache
 app.set("trust proxy", 1); // Trust the first proxy (e.g., Vercel, Render) for secure cookies
 
 // middlewares
@@ -33,8 +32,8 @@ app.use(helmet());
 app.use(cors({ origin: env.CLIENT_URL, credentials: true }));
 app.use(morgan(env.NODE_ENV === "development" ? "dev" : "combined"));
 
-// Prevent browsers from HTTP-caching API responses (security: no stale auth data)
-app.use((req, res, next) => {
+// Apply no-cache specifically to routes that handle auth and sensitive state
+app.use(["/api/v1/auth", "/api/v1/dashboard"], (req, res, next) => {
   res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
   res.set("Pragma", "no-cache");
   res.set("Expires", "0");
