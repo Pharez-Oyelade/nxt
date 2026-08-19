@@ -3,13 +3,14 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, ChevronRight } from "lucide-react";
+import { ArrowRight, ChevronRight, Menu, X } from "lucide-react";
 import { useGetCaseStudies } from "@/hooks/useCaseStudies";
 import { servicesData } from "@/data/services";
 import { ThemeToggle } from "./ThemeToggle";
 
 const Navbar = () => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { data: selectedWorks } = useGetCaseStudies(true, 4);
 
   // Close dropdown on mouse leave
@@ -167,7 +168,7 @@ const Navbar = () => {
                         View all Work
                       </h4>
                       <p className="text-sm text-muted-foreground">
-                        Check out all the exceptional case studies we've
+                        Check out all the exceptional case studies we&apos;ve
                         delivered.
                       </p>
                     </div>
@@ -200,22 +201,71 @@ const Navbar = () => {
           </Link>
 
           {/* Mobile Menu Toggle */}
-          <button className="md:hidden p-2 rounded-full bg-secondary/80 backdrop-blur-md border border-border/50 text-foreground ml-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-5 h-5"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-              />
-            </svg>
+          <button 
+            onClick={() => setIsMobileMenuOpen(true)}
+            className="md:hidden p-2 rounded-full bg-secondary/80 backdrop-blur-md border border-border/50 text-foreground ml-2"
+          >
+            <Menu className="w-5 h-5" />
           </button>
+        </div>
+      </div>
+
+      {/* Mobile Sidebar Overlay */}
+      <div 
+        className={`fixed inset-0 z-40 bg-background/80 backdrop-blur-sm transition-opacity md:hidden ${
+          isMobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        }`}
+        onClick={() => setIsMobileMenuOpen(false)}
+      />
+      
+      {/* Mobile Sidebar */}
+      <div 
+        className={`fixed top-0 right-0 bottom-0 z-50 w-[300px] bg-background border-l border-border shadow-2xl p-6 transition-transform duration-300 ease-in-out md:hidden flex flex-col pointer-events-auto ${
+          isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        <div className="flex items-center justify-between mb-8 mt-2">
+          <span className="text-xl font-fraunces font-bold">Menu</span>
+          <button 
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="p-2 rounded-full bg-secondary text-foreground hover:bg-secondary/80 transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <nav className="flex flex-col gap-2 flex-1 overflow-y-auto">
+          <Link href="/services" onClick={() => setIsMobileMenuOpen(false)} className="text-lg font-medium p-3 rounded-xl hover:bg-accent/5 hover:text-primary transition-all flex items-center justify-between group">
+            Services
+            <ChevronRight className="w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+          </Link>
+          <Link href="/work" onClick={() => setIsMobileMenuOpen(false)} className="text-lg font-medium p-3 rounded-xl hover:bg-accent/5 hover:text-primary transition-all flex items-center justify-between group">
+            Work
+            <ChevronRight className="w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+          </Link>
+          <Link href="/about" onClick={() => setIsMobileMenuOpen(false)} className="text-lg font-medium p-3 rounded-xl hover:bg-accent/5 hover:text-primary transition-all flex items-center justify-between group">
+            About
+            <ChevronRight className="w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+          </Link>
+          <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)} className="text-lg font-medium p-3 rounded-xl hover:bg-accent/5 hover:text-primary transition-all flex items-center justify-between group">
+            Contact
+            <ChevronRight className="w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+          </Link>
+        </nav>
+
+        <div className="mt-8 flex flex-col gap-6">
+          <div className="flex items-center justify-between p-3 rounded-xl bg-secondary/30 border border-border/50">
+            <span className="text-sm font-medium">Theme Preference</span>
+            <ThemeToggle />
+          </div>
+          <Link
+            href="/contact"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="flex items-center justify-center gap-2 text-sm font-medium px-5 py-3.5 rounded-xl bg-accent text-accent-foreground hover:bg-accent/90 transition-all shadow-sm"
+          >
+            Let&apos;s talk
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
       </div>
     </header>

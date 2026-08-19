@@ -35,7 +35,7 @@ const formSchema = z.object({
   description: z.string().optional(),
   slug: z.string().optional(),
   status: z.enum(["draft", "published", "archived"]),
-  selected: z.boolean().default(false),
+  selected: z.boolean(),
   coverImage: z.any().optional(),
   contentBlocks: z
     .array(contentBlockSchema)
