@@ -12,6 +12,8 @@ const _env = {
   CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
   PAYSTACK_SECRET_KEY: process.env.PAYSTACK_SECRET_KEY,
   CLIENT_URL: process.env.CLIENT_URL,
+  RESEND_API_KEY: process.env.RESEND_API_KEY,
+  FROM_EMAIL: process.env.FROM_EMAIL,
 };
 
 // fail fast if var is missing
@@ -21,6 +23,7 @@ const required = [
   "CLOUDINARY_CLOUD_NAME",
   "CLOUDINARY_API_KEY",
   "CLOUDINARY_API_SECRET",
+  "PAYSTACK_SECRET_KEY",
 ];
 
 for (const key of required) {

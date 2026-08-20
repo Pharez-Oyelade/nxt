@@ -29,6 +29,14 @@ export const errorHandler = (err, req, res, next) => {
     });
   }
 
+  // JWT errors
+  if (err?.name === "JsonWebTokenError" || err?.name === "TokenExpiredError") {
+    return res.status(StatusCodes.UNAUTHORIZED).json({
+      success: false,
+      message: "Not authorized, invalid or expired token",
+    });
+  }
+
   const statusCode = err?.statusCode || StatusCodes.INTERNAL_SERVER_ERROR;
   const message = err?.message || "Internal server error";
 

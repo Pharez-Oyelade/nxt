@@ -14,20 +14,30 @@ const leadSchema = new mongoose.Schema({
   },
   company: {
     type: String,
+    default: null,
   },
   projectType: {
     type: String,
+    default: null,
   },
   budgetRange: {
     type: String,
+    default: null,
   },
-  message: {
-    type: String,
-  },
+  messages: [
+    {
+      type: String,
+      required: true,
+    },
+  ],
   status: {
     type: String,
     enum: ["new", "contacted", "qualified", "lost"],
     default: "new",
+  },
+  archived: {
+    type: Boolean,
+    default: false,
   },
   createdAt: {
     type: Date,
