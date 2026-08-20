@@ -54,6 +54,12 @@ export default function Footer() {
           <Link href="/faq" className="hover:text-accent transition-colors">
             FAQS
           </Link>
+          <Link
+            href="/portal/login"
+            className="hover:text-accent transition-colors"
+          >
+            PORTAL
+          </Link>
         </div>
 
         <div className="flex flex-row md:flex-col gap-4 md:gap-5 md:pr-10 lg:pr-20">
