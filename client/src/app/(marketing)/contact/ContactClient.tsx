@@ -53,8 +53,8 @@ export default function ContactClient() {
               Let&apos;s talk.
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed mb-12 max-w-lg">
-              Whether you have a clear vision or just a rough idea, we&apos;re
-              here to help you turn it into a high-performing digital product.
+              Whether you have a clear vision or just a rough idea, we're here
+              to help you turn it into a high-performing digital product.
             </p>
 
             <div className="space-y-6">
@@ -67,7 +67,7 @@ export default function ContactClient() {
                     Email us
                   </p>
                   <a
-                    href="mailto:hello@nxt.agency"
+                    href="mailto:pharezoyelade@gmail.com"
                     className="text-lg font-bold hover:text-primary transition-colors"
                   >
                     pharezoyelade@gmail.com

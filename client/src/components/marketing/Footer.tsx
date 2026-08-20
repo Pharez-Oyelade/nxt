@@ -19,7 +19,7 @@ export default function Footer() {
           </p>
           {/* <div className="text-accent hover:text-white transition-colors cursor-pointer">support@nxt.studio</div> */}
           <div className="text-accent hover:text-white transition-colors cursor-pointer">
-            pharezoyelade@gmail.com
+            <a href="mailto:pharezoyelade@gmail.com">pharezoyelade@gmail.com</a>
           </div>
         </div>
 
