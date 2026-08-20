@@ -18,6 +18,7 @@ export default function FounderCard() {
             src="/images/pharez.jpg"
             alt="Pharez Oyelade"
             fill
+            sizes="1000px"
             className="object-cover scale-150"
           />
         </div>

@@ -49,14 +49,14 @@ export default function Hero() {
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-8">
           <Link
-            href="#"
+            href="/work"
             className="w-full sm:w-auto justify-center bg-accent px-6 py-3 text-primary rounded-md font-medium flex items-center gap-2 border-2 border-accent hover:bg-accent/90 hover:border-accent/90 active:scale-90 transition-all group"
           >
             See Work
             <ArrowUpRight className="w-5 h-5 group-hover:-translate-y-1 group-hover:translate-x-1 transition-all" />
           </Link>
           <Link
-            href="#"
+            href="/contact"
             className="w-full sm:w-auto justify-center text-center bg-transparent px-6 py-3 text-primary border-2 border-accent rounded-md active:scale-90 transition-all"
           >
             Get Started
@@ -65,7 +65,7 @@ export default function Hero() {
       </div>
 
       {/* ── Project card with hover squiggly arrow ── */}
-      <div className="hidden md:block absolute top-50 left-2 lg:left-10 w-[200px] lg:w-[250px] overflow-visible rotate-[-10deg] opacity-90 group/card cursor-pointer border-2 border-background rounded-md animate-[pulse_3s_ease-in-out_infinite]">
+      {/* <div className="hidden md:block absolute top-50 left-2 lg:left-10 w-[200px] lg:w-[250px] overflow-visible rotate-[-10deg] opacity-90 group/card cursor-pointer border-2 border-background rounded-md animate-[pulse_3s_ease-in-out_infinite]">
         <Image
           src="/arca_hero.png"
           width={1000}
@@ -73,30 +73,28 @@ export default function Hero() {
           alt="Arca Project"
           className="transition-transform duration-300 group-hover/card:scale-105 border-2 border-background rounded-md"
         />
-        {/* Squiggly arrow — appears on hover */}
         <SquigglyArrow className="absolute -top-12 -right-14 w-14 text-foreground/60 opacity-0 scale-75 transition-all duration-300 ease-out group-hover/card:opacity-100 group-hover/card:scale-100" />
         <SquigglyArrowDown className="absolute -bottom-10 -left-8 w-10 text-foreground/50 opacity-0 scale-75 transition-all duration-300 ease-out delay-75 group-hover/card:opacity-100 group-hover/card:scale-100" />
         <span className="absolute -top-13 rotate-[35deg] -right-18 text-foreground/60 opacity-0 transition-all duration-300 ease-out group-hover/card:opacity-100">
           Arca
         </span>
-      </div>
+      </div> */}
 
       {/* Card 2 */}
-      <div className="hidden md:block absolute bottom-20 right-10 lg:right-32 w-[200px] lg:w-[250px] overflow-visible rotate-[10deg] opacity-90 group/card cursor-pointer border-2 border-background rounded-md animate-[pulse_3s_ease-in-out_infinite]">
-        <Image
-          src="/Vendra_dashboard.png"
-          width={1000}
-          height={1000}
-          alt="Glams Project"
-          className="transition-transform duration-300 group-hover/card:scale-105 border-2 border-background rounded-md"
-        />
-        {/* Squiggly arrow — appears on hover */}
-        <SquigglyArrow className="absolute -top-12 -right-14 w-14 text-foreground/60 opacity-0 scale-75 transition-all duration-300 ease-out group-hover/card:opacity-100 group-hover/card:scale-100" />
-        <SquigglyArrowDown className="absolute -bottom-10 -left-8 w-10 text-foreground/50 opacity-0 scale-75 transition-all duration-300 ease-out delay-75 group-hover/card:opacity-100 group-hover/card:scale-100" />
-        <span className="absolute -top-13 rotate-[35deg] -right-18 text-foreground/60 opacity-0 transition-all duration-300 ease-out group-hover/card:opacity-100">
-          Vendra
-        </span>
-      </div>
+      {/* <div className="hidden md:block absolute bottom-20 right-10 lg:right-32 w-[200px] lg:w-[250px] overflow-visible rotate-[10deg] opacity-90 group/card cursor-pointer border-2 border-background rounded-md animate-[pulse_3s_ease-in-out_infinite]">
+       <Image
+           src="/Vendra_dashboard.png"
+           width={1000}
+           height={1000}
+           alt="Glams Project"
+           className="transition-transform duration-300 group-hover/card:scale-105 border-2 border-background rounded-md"
+         />
+         <SquigglyArrow className="absolute -top-12 -right-14 w-14 text-foreground/60 opacity-0 scale-75 transition-all duration-300 ease-out group-hover/card:opacity-100 group-hover/card:scale-100" />
+         <SquigglyArrowDown className="absolute -bottom-10 -left-8 w-10 text-foreground/50 opacity-0 scale-75 transition-all duration-300 ease-out delay-75 group-hover/card:opacity-100 group-hover/card:scale-100" />
+         <span className="absolute -top-13 rotate-[35deg] -right-18 text-foreground/60 opacity-0 transition-all duration-300 ease-out group-hover/card:opacity-100">
+           Vendra
+         </span>
+       </div> */}
     </section>
   );
 }

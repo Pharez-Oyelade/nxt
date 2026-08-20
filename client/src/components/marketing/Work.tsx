@@ -83,6 +83,7 @@ export default function Work() {
                         src={imageUrl}
                         alt={study.title}
                         fill
+                        sizes="1000px"
                         className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                       />
                     ) : (

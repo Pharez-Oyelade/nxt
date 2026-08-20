@@ -98,7 +98,7 @@ export default function BlogSection() {
                   key={blog._id}
                   className="min-w-[300px] md:min-w-[400px] max-w-[400px] shrink-0 snap-start group"
                 >
-                  <div className="w-full aspect-[4/3] relative rounded-2xl overflow-hidden mb-6 border border-border bg-sidebar/50">
+                  <div className="w-full h-[300px] aspect-[4/3] relative rounded-2xl overflow-hidden mb-6 border border-border bg-sidebar/50">
                     {blog.coverImage?.url &&
                     typeof blog.coverImage.url === "string" &&
                     blog.coverImage.url.trim() !== "" ? (
@@ -106,6 +106,7 @@ export default function BlogSection() {
                         src={blog.coverImage.url.trim()}
                         alt={blog.title}
                         fill
+                        sizes="600px"
                         className="object-cover group-hover:scale-105 transition-transform duration-700"
                       />
                     ) : (
