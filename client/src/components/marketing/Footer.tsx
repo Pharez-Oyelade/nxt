@@ -25,10 +25,9 @@ export default function Footer() {
         </div>
 
         <div className="flex flex-col gap-5">
-          <h4 className="text-white/40 text-sm font-medium tracking-wider mb-2 md:mb-0">LEGAL</h4>
-          <Link href="/" className="hover:text-accent transition-colors">TERMS & CONDITIONS</Link>
-          <Link href="/" className="hover:text-accent transition-colors">PRIVACY POLICY</Link>
-          <Link href="/" className="hover:text-accent transition-colors">COOKIE POLICY</Link>
+          <h4 className="text-white/40 text-sm font-medium tracking-wider mb-2 md:mb-0">LEGAL & MORE</h4>
+          <Link href="/privacy" className="hover:text-accent transition-colors">PRIVACY POLICY</Link>
+          <Link href="/faq" className="hover:text-accent transition-colors">FAQS</Link>
         </div>
 
         <div className="flex flex-row md:flex-col gap-4 md:gap-5 md:pr-10 lg:pr-20">

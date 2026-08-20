@@ -88,7 +88,7 @@ export default function BlogDetail() {
               )}
             </div>
 
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-fraunces font-semibold leading-tight tracking-tight mb-8 text-foreground break-words">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-fraunces font-semibold leading-tight tracking-tight mb-8 text-foreground">
               {blog.title}
             </h1>
           </header>
@@ -109,7 +109,7 @@ export default function BlogDetail() {
           {/* Body Content */}
           <div
             className="
-              w-full max-w-5xl mx-auto break-words
+              w-full max-w-5xl mx-auto
               [&>p]:text-lg md:[&>p]:text-xl [&>p]:leading-relaxed [&>p]:mb-8 [&>p]:text-muted-foreground
               [&>h2]:text-3xl md:[&>h2]:text-4xl [&>h2]:font-fraunces [&>h2]:font-semibold [&>h2]:mt-16 [&>h2]:mb-8 [&>h2]:text-foreground
               [&>h3]:text-2xl md:[&>h3]:text-3xl [&>h3]:font-semibold [&>h3]:mt-12 [&>h3]:mb-6 [&>h3]:text-foreground
@@ -122,7 +122,7 @@ export default function BlogDetail() {
               [&>pre]:bg-sidebar/80 [&>pre]:p-6 [&>pre]:rounded-2xl [&>pre]:overflow-x-auto [&>pre]:my-8 [&>pre]:border [&>pre]:border-border/50
               [&>code]:text-primary [&>code]:bg-primary/10 [&>code]:px-1.5 [&>code]:py-0.5 [&>code]:rounded-md
             "
-            dangerouslySetInnerHTML={{ __html: blog.body }}
+            dangerouslySetInnerHTML={{ __html: blog.body.replace(/&nbsp;/g, " ") }}
           />
         </article>
       </main>

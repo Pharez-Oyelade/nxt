@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { ArrowRight, ChevronRight, Menu, X } from "lucide-react";
 import { useGetCaseStudies } from "@/hooks/useCaseStudies";
@@ -9,9 +10,10 @@ import { servicesData } from "@/data/services";
 import { ThemeToggle } from "./ThemeToggle";
 
 const Navbar = () => {
+  const pathname = usePathname();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { data: selectedWorks } = useGetCaseStudies(true, 4);
+  const { data: selectedWorks } = useGetCaseStudies(true, 4, "published");
 
   // Close dropdown on mouse leave
   const handleMouseLeave = () => setActiveDropdown(null);
@@ -41,7 +43,11 @@ const Navbar = () => {
             >
               <Link
                 href="/services"
-                className="text-sm font-medium px-4 py-2 rounded-full flex items-center gap-1.5 text-foreground/80 hover:text-foreground hover:bg-background/80 transition-all"
+                className={`text-sm font-medium px-4 py-2 rounded-full flex items-center gap-1.5 transition-all ${
+                  pathname.startsWith("/services") 
+                    ? "text-foreground bg-background/80 shadow-sm" 
+                    : "text-foreground/80 hover:text-foreground hover:bg-background/80"
+                }`}
               >
                 Services
                 <span className="bg-primary/20 text-primary text-[10px] font-bold px-1.5 py-0.5 rounded-full">
@@ -55,7 +61,11 @@ const Navbar = () => {
             >
               <Link
                 href="/work"
-                className="text-sm font-medium px-4 py-2 rounded-full text-foreground/80 hover:text-foreground hover:bg-background/80 transition-all"
+                className={`text-sm font-medium px-4 py-2 rounded-full transition-all ${
+                  pathname.startsWith("/work")
+                    ? "text-foreground bg-background/80 shadow-sm"
+                    : "text-foreground/80 hover:text-foreground hover:bg-background/80"
+                }`}
               >
                 Work
               </Link>
@@ -63,7 +73,11 @@ const Navbar = () => {
             <div onMouseEnter={handleMouseLeave}>
               <Link
                 href="/about"
-                className="text-sm font-medium px-4 py-2 rounded-full text-foreground/80 hover:text-foreground hover:bg-background/80 transition-all"
+                className={`text-sm font-medium px-4 py-2 rounded-full transition-all ${
+                  pathname === "/about"
+                    ? "text-foreground bg-background/80 shadow-sm"
+                    : "text-foreground/80 hover:text-foreground hover:bg-background/80"
+                }`}
               >
                 About
               </Link>
@@ -71,7 +85,11 @@ const Navbar = () => {
             <div onMouseEnter={handleMouseLeave}>
               <Link
                 href="/contact"
-                className="text-sm font-medium px-4 py-2 rounded-full text-foreground/80 hover:text-foreground hover:bg-background/80 transition-all"
+                className={`text-sm font-medium px-4 py-2 rounded-full transition-all ${
+                  pathname === "/contact"
+                    ? "text-foreground bg-background/80 shadow-sm"
+                    : "text-foreground/80 hover:text-foreground hover:bg-background/80"
+                }`}
               >
                 Contact
               </Link>
@@ -235,19 +253,27 @@ const Navbar = () => {
         </div>
 
         <nav className="flex flex-col gap-2 flex-1 overflow-y-auto">
-          <Link href="/services" onClick={() => setIsMobileMenuOpen(false)} className="text-lg font-medium p-3 rounded-xl hover:bg-accent/5 hover:text-primary transition-all flex items-center justify-between group">
+          <Link href="/services" onClick={() => setIsMobileMenuOpen(false)} className={`text-lg font-medium p-3 rounded-xl transition-all flex items-center justify-between group ${
+            pathname.startsWith("/services") ? "bg-accent/10 text-primary" : "hover:bg-accent/5 hover:text-primary"
+          }`}>
             Services
             <ChevronRight className="w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
           </Link>
-          <Link href="/work" onClick={() => setIsMobileMenuOpen(false)} className="text-lg font-medium p-3 rounded-xl hover:bg-accent/5 hover:text-primary transition-all flex items-center justify-between group">
+          <Link href="/work" onClick={() => setIsMobileMenuOpen(false)} className={`text-lg font-medium p-3 rounded-xl transition-all flex items-center justify-between group ${
+            pathname.startsWith("/work") ? "bg-accent/10 text-primary" : "hover:bg-accent/5 hover:text-primary"
+          }`}>
             Work
             <ChevronRight className="w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
           </Link>
-          <Link href="/about" onClick={() => setIsMobileMenuOpen(false)} className="text-lg font-medium p-3 rounded-xl hover:bg-accent/5 hover:text-primary transition-all flex items-center justify-between group">
+          <Link href="/about" onClick={() => setIsMobileMenuOpen(false)} className={`text-lg font-medium p-3 rounded-xl transition-all flex items-center justify-between group ${
+            pathname === "/about" ? "bg-accent/10 text-primary" : "hover:bg-accent/5 hover:text-primary"
+          }`}>
             About
             <ChevronRight className="w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
           </Link>
-          <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)} className="text-lg font-medium p-3 rounded-xl hover:bg-accent/5 hover:text-primary transition-all flex items-center justify-between group">
+          <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)} className={`text-lg font-medium p-3 rounded-xl transition-all flex items-center justify-between group ${
+            pathname === "/contact" ? "bg-accent/10 text-primary" : "hover:bg-accent/5 hover:text-primary"
+          }`}>
             Contact
             <ChevronRight className="w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
           </Link>
