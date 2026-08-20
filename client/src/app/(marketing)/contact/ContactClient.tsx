@@ -47,25 +47,30 @@ export default function ContactClient() {
     <main className="min-h-screen pt-32 pb-24 bg-background flex flex-col">
       <div className="container mx-auto px-6 flex-1 flex flex-col justify-center">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start max-w-7xl mx-auto w-full">
-          
           {/* Left Column: Context */}
           <div className="flex flex-col pt-10">
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-fraunces font-bold tracking-tight mb-8">
               Let&apos;s talk.
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed mb-12 max-w-lg">
-              Whether you have a clear vision or just a rough idea, we&apos;re here to help you turn it into a high-performing digital product.
+              Whether you have a clear vision or just a rough idea, we&apos;re
+              here to help you turn it into a high-performing digital product.
             </p>
-            
+
             <div className="space-y-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-full bg-secondary/80 flex items-center justify-center">
                   <Mail className="w-5 h-5 text-foreground" />
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground font-medium mb-1">Email us</p>
-                  <a href="mailto:hello@nxt.agency" className="text-lg font-bold hover:text-primary transition-colors">
-                    hello@nxt.agency
+                  <p className="text-sm text-muted-foreground font-medium mb-1">
+                    Email us
+                  </p>
+                  <a
+                    href="mailto:hello@nxt.agency"
+                    className="text-lg font-bold hover:text-primary transition-colors"
+                  >
+                    pharezoyelade@gmail.com
                   </a>
                 </div>
               </div>
@@ -79,9 +84,12 @@ export default function ContactClient() {
                 <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center mb-8">
                   <CheckCircle2 className="w-12 h-12 text-primary" />
                 </div>
-                <h3 className="text-3xl font-fraunces font-bold mb-4">Request Received</h3>
+                <h3 className="text-3xl font-fraunces font-bold mb-4">
+                  Request Received
+                </h3>
                 <p className="text-muted-foreground text-lg mb-10 max-w-md">
-                  Thank you for reaching out. We&apos;ll review your inquiry and get back to you within 24 hours.
+                  Thank you for reaching out. We&apos;ll review your inquiry and
+                  get back to you within 24 hours.
                 </p>
                 <Link
                   href="/"
@@ -91,9 +99,15 @@ export default function ContactClient() {
                 </Link>
               </div>
             ) : (
-              <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6 relative z-10 animate-in fade-in duration-500">
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="flex flex-col gap-6 relative z-10 animate-in fade-in duration-500"
+              >
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="name" className="text-sm font-semibold text-foreground/80 pl-1">
+                  <label
+                    htmlFor="name"
+                    className="text-sm font-semibold text-foreground/80 pl-1"
+                  >
                     Full Name *
                   </label>
                   <input
@@ -103,12 +117,17 @@ export default function ContactClient() {
                     className="w-full px-6 py-4 rounded-2xl bg-background border border-border/50 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
                   />
                   {errors.name && (
-                    <p className="text-red-500 text-sm pl-1">{errors.name.message}</p>
+                    <p className="text-red-500 text-sm pl-1">
+                      {errors.name.message}
+                    </p>
                   )}
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="email" className="text-sm font-semibold text-foreground/80 pl-1">
+                  <label
+                    htmlFor="email"
+                    className="text-sm font-semibold text-foreground/80 pl-1"
+                  >
                     Email Address *
                   </label>
                   <input
@@ -119,12 +138,17 @@ export default function ContactClient() {
                     className="w-full px-6 py-4 rounded-2xl bg-background border border-border/50 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
                   />
                   {errors.email && (
-                    <p className="text-red-500 text-sm pl-1">{errors.email.message}</p>
+                    <p className="text-red-500 text-sm pl-1">
+                      {errors.email.message}
+                    </p>
                   )}
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="company" className="text-sm font-semibold text-foreground/80 pl-1">
+                  <label
+                    htmlFor="company"
+                    className="text-sm font-semibold text-foreground/80 pl-1"
+                  >
                     Company (Optional)
                   </label>
                   <input
@@ -136,7 +160,10 @@ export default function ContactClient() {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="message" className="text-sm font-semibold text-foreground/80 pl-1">
+                  <label
+                    htmlFor="message"
+                    className="text-sm font-semibold text-foreground/80 pl-1"
+                  >
                     Project Details *
                   </label>
                   <textarea
@@ -147,7 +174,9 @@ export default function ContactClient() {
                     className="w-full px-6 py-4 rounded-2xl bg-background border border-border/50 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all resize-none"
                   />
                   {errors.message && (
-                    <p className="text-red-500 text-sm pl-1">{errors.message.message}</p>
+                    <p className="text-red-500 text-sm pl-1">
+                      {errors.message.message}
+                    </p>
                   )}
                 </div>
 
@@ -167,11 +196,10 @@ export default function ContactClient() {
                 </button>
               </form>
             )}
-            
+
             {/* Decorative gradient for form container */}
             <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
           </div>
-
         </div>
       </div>
     </main>
