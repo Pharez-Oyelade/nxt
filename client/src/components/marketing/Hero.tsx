@@ -84,7 +84,7 @@ export default function Hero() {
       {/* Card 2 */}
       <div className="hidden md:block absolute bottom-20 right-10 lg:right-32 w-[200px] lg:w-[250px] overflow-visible rotate-[10deg] opacity-90 group/card cursor-pointer border-2 border-background rounded-md animate-[pulse_3s_ease-in-out_infinite]">
         <Image
-          src="/GlamsHero.png"
+          src="/Vendra_dashboard.png"
           width={1000}
           height={1000}
           alt="Glams Project"
@@ -94,7 +94,7 @@ export default function Hero() {
         <SquigglyArrow className="absolute -top-12 -right-14 w-14 text-foreground/60 opacity-0 scale-75 transition-all duration-300 ease-out group-hover/card:opacity-100 group-hover/card:scale-100" />
         <SquigglyArrowDown className="absolute -bottom-10 -left-8 w-10 text-foreground/50 opacity-0 scale-75 transition-all duration-300 ease-out delay-75 group-hover/card:opacity-100 group-hover/card:scale-100" />
         <span className="absolute -top-13 rotate-[35deg] -right-18 text-foreground/60 opacity-0 transition-all duration-300 ease-out group-hover/card:opacity-100">
-          Glams
+          Vendra
         </span>
       </div>
     </section>
