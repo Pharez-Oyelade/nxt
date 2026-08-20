@@ -29,7 +29,7 @@ export default function AboutPage() {
       {/* Philosophy Section */}
       <section className="container mx-auto px-6 mb-32 md:mb-48">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24 items-start">
-          <div className="sticky top-32">
+          <div className="md:sticky md:top-32 mb-8 md:mb-0">
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-fraunces font-bold mb-6 leading-tight">
               Unglamorous <br className="hidden md:block" /> Confidence.
             </h2>

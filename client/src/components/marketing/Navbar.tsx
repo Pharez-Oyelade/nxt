@@ -19,7 +19,7 @@ const Navbar = () => {
   const handleMouseLeave = () => setActiveDropdown(null);
 
   return (
-    <header className="fixed top-6 left-0 right-0 z-50 px-6 pointer-events-none">
+    <header className="fixed top-6 left-0 right-0 z-99 px-6 pointer-events-none">
       <div className="container mx-auto flex items-center justify-between">
         {/* Logo */}
         <Link
@@ -44,8 +44,8 @@ const Navbar = () => {
               <Link
                 href="/services"
                 className={`text-sm font-medium px-4 py-2 rounded-full flex items-center gap-1.5 transition-all ${
-                  pathname.startsWith("/services") 
-                    ? "text-foreground bg-background/80 shadow-sm" 
+                  pathname.startsWith("/services")
+                    ? "text-foreground bg-background/80 shadow-sm"
                     : "text-foreground/80 hover:text-foreground hover:bg-background/80"
                 }`}
               >
@@ -62,7 +62,8 @@ const Navbar = () => {
               <Link
                 href="/work"
                 className={`text-sm font-medium px-4 py-2 rounded-full transition-all ${
-                  pathname.startsWith("/work")
+                  pathname.startsWith("/work") ||
+                  pathname.startsWith("/case-studies")
                     ? "text-foreground bg-background/80 shadow-sm"
                     : "text-foreground/80 hover:text-foreground hover:bg-background/80"
                 }`}
@@ -219,7 +220,7 @@ const Navbar = () => {
           </Link>
 
           {/* Mobile Menu Toggle */}
-          <button 
+          <button
             onClick={() => setIsMobileMenuOpen(true)}
             className="md:hidden p-2 rounded-full bg-secondary/80 backdrop-blur-md border border-border/50 text-foreground ml-2"
           >
@@ -229,22 +230,24 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Sidebar Overlay */}
-      <div 
+      <div
         className={`fixed inset-0 z-40 bg-background/80 backdrop-blur-sm transition-opacity md:hidden ${
-          isMobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+          isMobileMenuOpen
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
         }`}
         onClick={() => setIsMobileMenuOpen(false)}
       />
-      
+
       {/* Mobile Sidebar */}
-      <div 
+      <div
         className={`fixed top-0 right-0 bottom-0 z-50 w-[300px] bg-background border-l border-border shadow-2xl p-6 transition-transform duration-300 ease-in-out md:hidden flex flex-col pointer-events-auto ${
           isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <div className="flex items-center justify-between mb-8 mt-2">
           <span className="text-xl font-fraunces font-bold">Menu</span>
-          <button 
+          <button
             onClick={() => setIsMobileMenuOpen(false)}
             className="p-2 rounded-full bg-secondary text-foreground hover:bg-secondary/80 transition-colors"
           >
@@ -253,27 +256,52 @@ const Navbar = () => {
         </div>
 
         <nav className="flex flex-col gap-2 flex-1 overflow-y-auto">
-          <Link href="/services" onClick={() => setIsMobileMenuOpen(false)} className={`text-lg font-medium p-3 rounded-xl transition-all flex items-center justify-between group ${
-            pathname.startsWith("/services") ? "bg-accent/10 text-primary" : "hover:bg-accent/5 hover:text-primary"
-          }`}>
+          <Link
+            href="/services"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className={`text-lg font-medium p-3 rounded-xl transition-all flex items-center justify-between group ${
+              pathname.startsWith("/services")
+                ? "bg-accent/10 text-primary"
+                : "hover:bg-accent/5 hover:text-primary"
+            }`}
+          >
             Services
             <ChevronRight className="w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
           </Link>
-          <Link href="/work" onClick={() => setIsMobileMenuOpen(false)} className={`text-lg font-medium p-3 rounded-xl transition-all flex items-center justify-between group ${
-            pathname.startsWith("/work") ? "bg-accent/10 text-primary" : "hover:bg-accent/5 hover:text-primary"
-          }`}>
+          <Link
+            href="/work"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className={`text-lg font-medium p-3 rounded-xl transition-all flex items-center justify-between group ${
+              pathname.startsWith("/work") ||
+              pathname.startsWith("/case-studies")
+                ? "bg-accent/10 text-primary"
+                : "hover:bg-accent/5 hover:text-primary"
+            }`}
+          >
             Work
             <ChevronRight className="w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
           </Link>
-          <Link href="/about" onClick={() => setIsMobileMenuOpen(false)} className={`text-lg font-medium p-3 rounded-xl transition-all flex items-center justify-between group ${
-            pathname === "/about" ? "bg-accent/10 text-primary" : "hover:bg-accent/5 hover:text-primary"
-          }`}>
+          <Link
+            href="/about"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className={`text-lg font-medium p-3 rounded-xl transition-all flex items-center justify-between group ${
+              pathname === "/about"
+                ? "bg-accent/10 text-primary"
+                : "hover:bg-accent/5 hover:text-primary"
+            }`}
+          >
             About
             <ChevronRight className="w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
           </Link>
-          <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)} className={`text-lg font-medium p-3 rounded-xl transition-all flex items-center justify-between group ${
-            pathname === "/contact" ? "bg-accent/10 text-primary" : "hover:bg-accent/5 hover:text-primary"
-          }`}>
+          <Link
+            href="/contact"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className={`text-lg font-medium p-3 rounded-xl transition-all flex items-center justify-between group ${
+              pathname === "/contact"
+                ? "bg-accent/10 text-primary"
+                : "hover:bg-accent/5 hover:text-primary"
+            }`}
+          >
             Contact
             <ChevronRight className="w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
           </Link>
