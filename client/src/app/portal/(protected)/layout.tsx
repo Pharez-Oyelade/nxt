@@ -7,6 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import { Bell, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { GlobalSearch } from "@/components/admin/global-search";
 
 export default function ProtectedPortalLayout({
   children,
@@ -32,14 +33,7 @@ export default function ProtectedPortalLayout({
           </div>
           
           <div className="flex items-center gap-4">
-            <div className="relative w-64 hidden md:block">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search..."
-                className="w-full bg-background pl-8 shadow-none"
-              />
-            </div>
+            <GlobalSearch />
             <Button variant="ghost" size="icon" className="relative">
               <Bell className="h-5 w-5" />
               <span className="absolute top-1.5 right-1.5 flex h-2 w-2">
