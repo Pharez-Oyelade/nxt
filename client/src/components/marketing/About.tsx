@@ -15,7 +15,7 @@ export default function About() {
       <div className="w-full md:w-[50%]">
         <p className="text-left md:text-right text-xl md:text-3xl font-semibold pb-10">
           A brand and digital product studio in Nigeria. We build brands and
-          digital products that look good and work, handling strategy, identity
+          digital products that look good and work; handling strategy, identity
           and engineering.
         </p>
         <Link

@@ -31,16 +31,19 @@ export const servicesData: ServiceData[] = [
     ],
     process: [
       {
-        title: "Discovery & Immersion",
-        description: "We dive deep into your industry, competitors, and target audience to uncover unique opportunities and challenges.",
+        title: "Discovery & Research",
+        description:
+          "We dive deep into your industry, competitors, and target audience to uncover unique opportunities and challenges.",
       },
       {
         title: "Synthesis & Positioning",
-        description: "We translate raw data into a clear brand narrative and product positioning strategy that sets you apart.",
+        description:
+          "We translate raw data into a clear brand narrative and product positioning strategy that sets you apart.",
       },
       {
         title: "Roadmapping",
-        description: "We define actionable phases for execution, ensuring the most critical features are prioritized for your MVP and beyond.",
+        description:
+          "We define actionable phases for execution, ensuring the most critical features are prioritized for your MVP and beyond.",
       },
     ],
   },
@@ -49,7 +52,7 @@ export const servicesData: ServiceData[] = [
     name: "Identity",
     subtitle: "We give you a clear identity that sets your brand apart.",
     description:
-      "Your brand is more than a logo—it's how people feel when they interact with your product. We craft memorable visual identities, comprehensive design systems, and compelling brand voices that resonate with your audience and communicate unglamorous confidence.",
+      "Your brand is more than a logo; it's how people feel when they interact with your product. We build memorable visual identities, design systems, and compelling brand voices that resonate with your audience and communicate unglamorous confidence.",
     heroImage: "/images/services/identity_bg_1786802112521.jpg",
     capabilities: [
       "Brand Strategy",
@@ -62,15 +65,18 @@ export const servicesData: ServiceData[] = [
     process: [
       {
         title: "Brand Workshop",
-        description: "We collaborate to uncover your core values, personality, and the unique tone of voice that will define your brand.",
+        description:
+          "We collaborate to uncover your core values, personality, and the unique tone of voice that will define your brand.",
       },
       {
         title: "Visual Exploration",
-        description: "We present multiple art directions, exploring typography, color palettes, and visual motifs that align with your strategy.",
+        description:
+          "We present multiple art directions, exploring typography, color palettes, and visual motifs that align with your strategy.",
       },
       {
         title: "System Delivery",
-        description: "We finalize the chosen direction and build a robust, scalable design system and brand guideline document.",
+        description:
+          "We finalize the chosen direction and build a robust design system and brand guideline document.",
       },
     ],
   },
@@ -93,15 +99,18 @@ export const servicesData: ServiceData[] = [
     process: [
       {
         title: "Wireframing",
-        description: "We establish the structural layout and user flows, focusing purely on functionality and seamless navigation.",
+        description:
+          "We establish the structural layout and user flows, focusing purely on functionality and seamless navigation.",
       },
       {
         title: "Visual Interface",
-        description: "We apply the brand identity to the wireframes, crafting high-fidelity screens with premium typography and styling.",
+        description:
+          "We apply the brand identity to the wireframes, crafting high-fidelity screens with premium typography and styling.",
       },
       {
         title: "Prototyping",
-        description: "We build interactive prototypes to test micro-interactions, transitions, and the overall user journey before development.",
+        description:
+          "We build interactive prototypes to test micro-interactions, transitions, and the overall user journey before development.",
       },
     ],
   },
@@ -123,15 +132,18 @@ export const servicesData: ServiceData[] = [
     process: [
       {
         title: "Architecture Setup",
-        description: "We select the optimal tech stack and configure the foundational architecture, databases, and deployment pipelines.",
+        description:
+          "We select the optimal tech stack and configure the foundational architecture, databases, and deployment pipelines.",
       },
       {
         title: "Development Sprints",
-        description: "We build the product in iterative cycles, integrating front-end interfaces with secure back-end APIs.",
+        description:
+          "We build the product in iterative cycles, integrating front-end interfaces with secure back-end APIs.",
       },
       {
         title: "Testing & Launch",
-        description: "We conduct rigorous QA testing for performance, accessibility, and security before deploying your product to production.",
+        description:
+          "We conduct rigorous QA testing for performance, accessibility, and security before deploying your product to production.",
       },
     ],
   },
