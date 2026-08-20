@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
+import Link from "next/link";
 
 export default function PortalLogin() {
   const { login, isLoggingIn } = useAuth();
@@ -19,6 +20,13 @@ export default function PortalLogin() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4">
+      {/* Simple Navbar */}
+      <header className="absolute top-0 left-0 w-full p-6 md:p-10 flex items-center justify-start">
+        <Link href="/" className="text-3xl font-fraunces font-bold text-foreground hover:opacity-80 transition-opacity">
+          NXT.
+        </Link>
+      </header>
+
       <div className="w-full max-w-md space-y-8">
         <div className="text-center">
           <div className="flex justify-center mb-6">

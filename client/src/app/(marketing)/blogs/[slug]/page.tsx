@@ -1,56 +1,71 @@
-"use client";
-
-import { useParams } from "next/navigation";
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { useGetPublishedBlog } from "@/hooks/useBlogs";
 import Navbar from "@/components/marketing/Navbar";
 import Footer from "@/components/marketing/Footer";
 import { format } from "date-fns";
+import { notFound } from "next/navigation";
 
-export default function BlogDetail() {
-  const params = useParams();
-  const slug = params?.slug as string;
-  const { data: blog, isLoading } = useGetPublishedBlog(slug);
-
-  if (isLoading) {
-    return (
-      <>
-        <Navbar />
-        <main className="min-h-screen bg-background pt-32 pb-24 px-4 md:px-10 max-w-4xl mx-auto flex flex-col gap-6 animate-pulse">
-          <div className="w-32 h-8 bg-sidebar/50 rounded-full mb-8"></div>
-          <div className="w-full h-20 bg-sidebar/50 rounded-2xl"></div>
-          <div className="w-2/3 h-20 bg-sidebar/50 rounded-2xl mb-10"></div>
-          <div className="w-full aspect-[21/9] bg-sidebar/50 rounded-3xl mb-12"></div>
-          <div className="w-full h-4 bg-sidebar/50 rounded"></div>
-          <div className="w-full h-4 bg-sidebar/50 rounded"></div>
-          <div className="w-3/4 h-4 bg-sidebar/50 rounded"></div>
-        </main>
-        <Footer />
-      </>
+// Fetch data on the server
+async function getBlog(slug: string) {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/blogs/${slug}`,
+      {
+        next: { revalidate: 60 }, // Revalidate every 60 seconds
+      },
     );
+
+    if (!res.ok) {
+      if (res.status === 404) return null;
+      throw new Error("Failed to fetch blog");
+    }
+
+    const data = await res.json();
+    return data.blogPost;
+  } catch (error) {
+    console.error("Error fetching blog:", error);
+    return null;
   }
+}
+
+// Generate dynamic SEO metadata
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const blog = await getBlog(slug);
 
   if (!blog) {
-    return (
-      <>
-        <Navbar />
-        <main className="min-h-screen flex flex-col items-center justify-center gap-6">
-          <h1 className="text-4xl font-fraunces font-bold">Post Not Found</h1>
-          <p className="text-muted-foreground">
-            The article you're looking for doesn't exist or has been removed.
-          </p>
-          <Link
-            href="/#blog"
-            className="text-primary hover:underline flex items-center gap-2 mt-4"
-          >
-            <ArrowLeft className="w-4 h-4" /> Back to Insights
-          </Link>
-        </main>
-        <Footer />
-      </>
-    );
+    return {
+      title: "Post Not Found | NXT Agency",
+    };
+  }
+
+  return {
+    title: `${blog.title} | NXT Agency Insights`,
+    description: blog.excerpt || `Read ${blog.title} on NXT Agency Insights`,
+    openGraph: {
+      title: blog.title,
+      description: blog.excerpt,
+      images: blog.coverImage?.url ? [blog.coverImage.url] : [],
+    },
+  };
+}
+
+export default async function BlogDetail({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const blog = await getBlog(slug);
+
+  if (!blog) {
+    notFound(); // Triggers the nearest not-found.tsx or default 404 page
   }
 
   return (
@@ -63,7 +78,7 @@ export default function BlogDetail() {
         <article className="w-full max-w-5xl mx-auto px-4 md:px-8 lg:px-0 relative z-10">
           {/* Back button */}
           <Link
-            href="/#blog"
+            href="/blogs"
             className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors mb-12"
           >
             <ArrowLeft className="w-5 h-5" />
@@ -122,7 +137,9 @@ export default function BlogDetail() {
               [&>pre]:bg-sidebar/80 [&>pre]:p-6 [&>pre]:rounded-2xl [&>pre]:overflow-x-auto [&>pre]:my-8 [&>pre]:border [&>pre]:border-border/50
               [&>code]:text-primary [&>code]:bg-primary/10 [&>code]:px-1.5 [&>code]:py-0.5 [&>code]:rounded-md
             "
-            dangerouslySetInnerHTML={{ __html: blog.body.replace(/&nbsp;/g, " ") }}
+            dangerouslySetInnerHTML={{
+              __html: blog.body.replace(/&nbsp;/g, " "),
+            }}
           />
         </article>
       </main>

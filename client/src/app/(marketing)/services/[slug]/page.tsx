@@ -92,7 +92,7 @@ export default function ServicePage() {
             Service Not Found
           </h1>
           <Link
-            href="/#services"
+            href="/services"
             className="text-primary hover:underline flex items-center gap-2"
           >
             <ArrowLeft className="w-4 h-4" /> Back to Services
@@ -113,7 +113,7 @@ export default function ServicePage() {
         {/* Hero Section */}
         <section className="pt-32 md:pt-48 pb-20 px-4 md:px-10 max-w-7xl mx-auto relative z-10">
           <Link
-            href="/#services"
+            href="/services"
             className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors mb-12"
           >
             <ArrowLeft className="w-5 h-5" />
