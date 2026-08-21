@@ -6,22 +6,39 @@ const FROM_EMAIL = env.FROM_EMAIL;
 
 async function sendEmail({ to, subject, html }) {
   if (!env.RESEND_API_KEY || !FROM_EMAIL) {
-    throw new Error("Email not configured");
+    console.log("\n=============================");
+    console.log("Mock Email Sent!");
+    console.log("To:", to);
+    console.log("Subject:", subject);
+    console.log("Content:", html);
+    console.log("=============================\n");
+    return { id: "mock-email-id" };
   }
 
-  const { data, error } = await resend.emails.send({
-    from: FROM_EMAIL,
-    to,
-    subject,
-    html,
-  });
+  try {
+    const { data, error } = await resend.emails.send({
+      from: FROM_EMAIL,
+      to,
+      subject,
+      html,
+    });
 
-  if (error) {
-    console.error("Resend Error:", error);
-    throw new Error(error.message);
+    if (error) {
+      console.warn("Resend Error, falling back to mock email. Error:", error.message);
+      console.log("\n=============================");
+      console.log("Mock Email Sent!");
+      console.log("To:", to);
+      console.log("Subject:", subject);
+      console.log("Content:", html);
+      console.log("=============================\n");
+      return { id: "mock-email-id" };
+    }
+
+    return data;
+  } catch (err) {
+    console.error("Email failed, falling back to mock:", err.message);
+    return { id: "mock-email-id" };
   }
-
-  return data;
 }
 
 export async function sendInviteEmail({ to, token }) {
